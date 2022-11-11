@@ -1,5 +1,6 @@
 import 'package:MyFest/Utils.dart';
 import 'package:MyFest/home.dart';
+import 'package:MyFest/verify_email.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'Utils.dart';
@@ -41,7 +42,7 @@ class MainPage extends StatelessWidget {
                 child: Text('HUBO UN ERROR!'),
               );
             } else if (snapshot.hasData) {
-              return const HomePage();
+              return VerifyEmailPage();
             } else {
               return AuthPage();
             }

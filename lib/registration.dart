@@ -133,24 +133,27 @@ class MainFormState extends State<PageRegistration> {
                 Container(
                   height: 50,
                   width: 250,
-                  decoration: BoxDecoration(
-                      color: const Color(0xfff70506),
-                      borderRadius: BorderRadius.circular(20)),
-                  child: TextButton(
+                  child: 
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xfff70506),
+                      minimumSize: const Size.fromHeight(50),
+                    ),
+                    icon: const Icon(
+                      Icons.arrow_forward,
+                      size: 32,
+                    ),
+                    label: const Text(
+                      'Crear Cuenta',
+                      style: TextStyle(fontSize: 20),
+                    ),
                     onPressed: signUp,
                     // () {
-                    //   // If the form is true (valid), or false.
-                    //   if (keyForm.currentState!.validate()) {
-                    //     ScaffoldMessenger.of(context).showSnackBar(
-                    //       const SnackBar(content: Text('Processing Data')),
-                    //     );
-                    //   }
+                    //   Navigator.push(
+                    //         context, MaterialPageRoute(builder: (_) => HomePage()));
                     // },
-                    child: const Text(
-                      'Crear Cuenta',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    ),
                   ),
+                  
                 ),
                 const SizedBox(
                   height: 20,
