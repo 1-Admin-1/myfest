@@ -263,8 +263,7 @@ class MainFormState extends State<PageRegistration> {
     } on FirebaseAuthException catch (e) {
       
         print(e);
-      
-      Utils.showSnackBar(e.message);
+        Utils.showSnackBar(e.message);
     }
     // Navigator.of(context) not working!
     navigatorKey.currentState!.popUntil((route) => route.isFirst);

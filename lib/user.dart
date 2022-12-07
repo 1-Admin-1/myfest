@@ -1,11 +1,8 @@
 
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'user_required.dart';
 import 'user_preferences.dart';
-import 'appbar_widget.dart';
 import 'button_widget.dart';
 import 'numbers_widget.dart';
 import 'profile_widget.dart';

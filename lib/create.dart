@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'dart:developer';
-import 'dart:ffi';
-
+import 'package:MyFest/Utils.dart';
+import 'package:MyFest/models/dataEvents.dart';
 import 'package:MyFest/models/note.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'home.dart';
 import 'package:MyFest/db/operation.dart';
@@ -16,16 +16,17 @@ class PageCreate extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<PageCreate> {
+  final user = FirebaseAuth.instance.currentUser!;
   final controllerTitle = TextEditingController();
   final controllerDescripcion = TextEditingController();
   final controllerFecha = TextEditingController();
   final controllerDireccion = TextEditingController();
   final controllerDirecionNumero = TextEditingController();
-  GlobalKey<FormState> keyForm = new GlobalKey();
-  TextEditingController namePartyCtrl = new TextEditingController();
-  TextEditingController addressCtrl = new TextEditingController();
-  TextEditingController addressNumberCtrl = new TextEditingController();
-  TextEditingController descriptionCtrl = new TextEditingController();
+  GlobalKey<FormState> keyForm = GlobalKey();
+  TextEditingController namePartyCtrl = TextEditingController();
+  TextEditingController addressCtrl = TextEditingController();
+  TextEditingController addressNumberCtrl = TextEditingController();
+  TextEditingController descriptionCtrl = TextEditingController();
 
 
   Future createUser({required Events events}) async {
@@ -38,14 +39,16 @@ class _RegisterPageState extends State<PageCreate> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: new Scaffold(
-        appBar: new AppBar(
-          title: new Text('Crear Fiesta'),
+      home: Scaffold(
+        
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          title: const Text('Crear Fiesta'),
         ),
-        body: new SingleChildScrollView(
-          child: new Container(
-            margin: new EdgeInsets.all(40.0),
-            child: new Form(
+        body: SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.all(40.0),
+            child: Form(
               key: keyForm,
               child: formUI(),
             ),
@@ -57,7 +60,7 @@ class _RegisterPageState extends State<PageCreate> {
 
   formItemsDesign(icon, item) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 7),
+      padding: const EdgeInsets.symmetric(vertical: 7),
       child: Card(child: ListTile(leading: Icon(icon), title: item)),
     );
   }
@@ -69,7 +72,7 @@ class _RegisterPageState extends State<PageCreate> {
             Icons.celebration_rounded,
             TextFormField(
               controller: controllerTitle,
-              decoration: new InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Nombre de la Fiesta',
               ),
               validator: validateNameParty,
@@ -78,7 +81,7 @@ class _RegisterPageState extends State<PageCreate> {
             Icons.location_pin,
             TextFormField(
               controller: controllerDireccion,
-              decoration: new InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Dirección',
               ),
               keyboardType: TextInputType.streetAddress,
@@ -88,7 +91,7 @@ class _RegisterPageState extends State<PageCreate> {
             Icons.location_pin,
             TextFormField(
               controller: controllerDirecionNumero,
-              decoration: new InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Numero de Dirección',
               ),
               keyboardType: TextInputType.text,
@@ -98,7 +101,7 @@ class _RegisterPageState extends State<PageCreate> {
             Icons.mode_comment,
             TextFormField(
               controller: controllerDescripcion,
-              decoration: new InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Descripción',
               ),
               keyboardType: TextInputType.text,
@@ -109,7 +112,7 @@ class _RegisterPageState extends State<PageCreate> {
             DateTimeField(
               format: DateFormat("yyyy-MM-dd"),
               controller: controllerFecha,
-              decoration: new InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Fecha de Evento',
               ),
               onShowPicker: (context, currentValue) {
@@ -117,27 +120,23 @@ class _RegisterPageState extends State<PageCreate> {
                     context: context,
                     firstDate: DateTime.now(),
                     initialDate: currentValue ?? DateTime.now(),
-                    lastDate: DateTime.now().add(new Duration(days: 30)));
+                    lastDate: DateTime.now().add(const Duration(days: 30)));
               },
             )),
         GestureDetector(
             onTap: () {
               save();
               Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => HomePage()));
+                  context, MaterialPageRoute(builder: (_) => const HomePage()));
             },
             child: Container(
-              margin:
-                  new EdgeInsets.only(left: 30, right: 30, top: 30, bottom: 10),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                gradient: LinearGradient(colors: [
-                  Color(0xFF0EDED2),
-                  Color(0xFF03A0FE),
-                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
-              ),
-              child: ElevatedButton(
+              height: 50,
+              width: 300,
+              child: ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xfff70506),
+                      minimumSize: const Size.fromHeight(50),
+                    ),
                 onPressed: () {
                   // If the form is true (valid), or false.
                   if (keyForm.currentState!.validate()) {
@@ -150,46 +149,55 @@ class _RegisterPageState extends State<PageCreate> {
                       descripcion: controllerDescripcion.text,
                       fecha: DateTime.parse(controllerFecha.text),
                       direccion: controllerDireccion.text,
-                      numeroDireccion:
-                          int.parse(controllerDirecionNumero.text));
+                      numeroDireccion: int.parse(controllerDirecionNumero.text), 
+                      userEmail: user.email!);
                   createUser(events: events);
                   Navigator.pop(context);
                 },
-                child: const Text("PUBLICAR"),
-                style: TextButton.styleFrom(
-                    padding: EdgeInsets.only(top: 16, bottom: 16),
-                    textStyle: const TextStyle(
-                        color: Colors.white,
+                icon: const Icon(
+                    Icons.add_box,
+                    color: Colors.black,
+                    size: 32,
+                  ),
+                label: const Text("PUBLICAR",
+                style: TextStyle(
+                        color: Colors.black,
                         fontSize: 18,
-                        fontWeight: FontWeight.w500)),
+                        fontWeight: FontWeight.w500),),
+                
+                // style: TextButton.styleFrom(
+                //     padding: EdgeInsets.only(top: 16, bottom: 16),
+                //     textStyle: const TextStyle(
+                //         color: Colors.white,
+                //         fontSize: 18,
+                //         fontWeight: FontWeight.w500)),
               ),
-            )),
+            )
+            ),
+            const SizedBox(height: 10,),
         GestureDetector(
             child: Container(
-                margin: new EdgeInsets.only(
-                    left: 30, right: 30, top: 0, bottom: 30),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  gradient: LinearGradient(colors: [
-                    Color(0xFF0EDED2),
-                    Color(0xFF193073),
-                  ], begin: Alignment.topLeft, end: Alignment.bottomRight),
-                ),
-                child: TextButton(
+                height: 50,
+                width: 300,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xfff70506),
+                      minimumSize: const Size.fromHeight(50),
+                    ),
                   onPressed: () {
                     // If the form is true (valid), or false.
                     Navigator.push(
-                        context, MaterialPageRoute(builder: (_) => HomePage()));
+                        context, MaterialPageRoute(builder: (_) => const HomePage()));
                   },
-                  style: TextButton.styleFrom(
-                    textStyle: const TextStyle(
-                        color: Colors.white,
+                  
+                  child: const Text("Cancelar", 
+                  style: TextStyle(
+                        color: Colors.black,
                         fontSize: 18,
                         fontWeight: FontWeight.w500),
-                    padding: EdgeInsets.only(top: 16, bottom: 16),
-                  ),
-                  child: const Text("Cancelar"),
+                   ),
+                  
+                  
                 )))
       ],
     );
@@ -197,7 +205,7 @@ class _RegisterPageState extends State<PageCreate> {
 
   String? validateNameParty(String? value) {
     String pattern = r'(^[a-zA-Z ]*$)';
-    RegExp regExp = new RegExp(pattern);
+    RegExp regExp = RegExp(pattern);
     if (value?.length == 0) {
       return "El nombre es necesario";
     } else if (!regExp.hasMatch(value!)) {
@@ -208,7 +216,7 @@ class _RegisterPageState extends State<PageCreate> {
 
   String? validateAddress(String? value) {
     String patttern = r'^[a-zA-Z]*$';
-    RegExp regExp = new RegExp(patttern);
+    RegExp regExp = RegExp(patttern);
     if (value?.length == 0) {
       return "La dirección es necesaria";
     } else if (!regExp.hasMatch(value!)) {
@@ -219,7 +227,7 @@ class _RegisterPageState extends State<PageCreate> {
 
   String? validateAddressNumber(String? value) {
     String patttern = r'^[a-zA-Z0-9]*$';
-    RegExp regExp = new RegExp(patttern);
+    RegExp regExp = RegExp(patttern);
     if (value?.length == 0) {
       return "El numero es necesario";
     } else if (!regExp.hasMatch(value!)) {
@@ -230,7 +238,7 @@ class _RegisterPageState extends State<PageCreate> {
 
   String? validateDescription(String? value) {
     String pattern = r'^[a-zA-Z0-9]*$';
-    RegExp regExp = new RegExp(pattern);
+    RegExp regExp = RegExp(pattern);
     if (value?.length == 0) {
       return "La descripcion es necesaria";
     } else if (!regExp.hasMatch(value!)) {
@@ -256,28 +264,28 @@ class _RegisterPageState extends State<PageCreate> {
   }
 }
 
-class Events {
-  late String id;
-  late final String title;
-  late final String descripcion;
-  late final DateTime fecha;
-  late final String direccion;
-  late final int numeroDireccion;
-  Events({
-    this.id = '',
-    required this.title,
-    required this.descripcion,
-    required this.fecha,
-    required this.direccion,
-    required this.numeroDireccion,
-  });
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'descripcion': descripcion,
-        'fecha': fecha,
-        'direccion': direccion,
-        'numeroDireccion': numeroDireccion,
-      };
+// class Events {
+//   late String id;
+//   late final String title;
+//   late final String descripcion;
+//   late final DateTime fecha;
+//   late final String direccion;
+//   late final int numeroDireccion;
+//   Events({
+//     this.id = '',
+//     required this.title,
+//     required this.descripcion,
+//     required this.fecha,
+//     required this.direccion,
+//     required this.numeroDireccion,
+//   });
+//   Map<String, dynamic> toJson() => {
+//         'id': id,
+//         'title': title,
+//         'descripcion': descripcion,
+//         'fecha': fecha,
+//         'direccion': direccion,
+//         'numeroDireccion': numeroDireccion,
+//       };
   
-}
+// }
