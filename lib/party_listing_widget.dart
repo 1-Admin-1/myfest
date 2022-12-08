@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:MyFest/app_theme.dart';
-import 'package:MyFest/widgets/product_list.dart';
+import 'package:MyFest/widgets/party_list.dart';
 import 'package:flutter/material.dart';
 import 'models/dataEvents.dart';
 
@@ -15,7 +15,7 @@ class _ProductListingWidgetState extends State<ProductListingWidget> {
   TextEditingController? textController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   bool isSearchStarted = false;
-
+  
   List<Product> searchedProducts = [];
   Stream<List<Events>> readEvents() => FirebaseFirestore.instance
       .collection('events')
@@ -149,7 +149,7 @@ class _ProductListingWidgetState extends State<ProductListingWidget> {
           //   ),
           // ),
           Expanded(
-            child: ProductList(
+            child: PartyList(
              
             ),
           ),

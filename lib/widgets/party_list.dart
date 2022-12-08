@@ -1,6 +1,6 @@
-
 import 'package:animations/animations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,18 +9,18 @@ import '../bloc/cart_bloc.dart';
 import '../bloc/state/cart_state.dart';
 import '../models/dataEvents.dart';
 
-
 import '../party_detail_widget.dart';
 
-class ProductList extends StatefulWidget {
-  ProductList({Key? key}) : super(key: key);
+class PartyList extends StatefulWidget {
+  PartyList({Key? key}) : super(key: key);
 
   @override
   _MyProductList createState() => _MyProductList();
 }
 
-class _MyProductList extends State<ProductList> {
-
+class _MyProductList extends State<PartyList> {
+  final user = FirebaseAuth.instance.currentUser!;
+  
   Stream<List<Events>> readEvents() => FirebaseFirestore.instance
       .collection('events')
       .snapshots()
@@ -37,11 +37,9 @@ class _MyProductList extends State<ProductList> {
     }
   }
 
-  OpenContainer  makeListTile(Events events, itemNo) => OpenContainer<bool>(
-    
-       
+  OpenContainer makeListTile(Events events, itemNo) => OpenContainer<bool>(
         openBuilder: (BuildContext _, VoidCallback openContainer) {
-          return ProductDetailWidget(
+          return PartyDetailWidget(
             events: events,
           );
         },
@@ -93,7 +91,8 @@ class _MyProductList extends State<ProductList> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(8, 4, 0, 0),
+                          padding:
+                              const EdgeInsetsDirectional.fromSTEB(8, 4, 0, 0),
                           child: Text(
                             events.title,
                             style: AppTheme.of(context).bodyText4,
@@ -108,10 +107,10 @@ class _MyProductList extends State<ProductList> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(8, 4, 0, 0),
+                          padding:
+                              const EdgeInsetsDirectional.fromSTEB(8, 4, 0, 0),
                           child: Text(
-                            
-                            events.fecha.toString().replaceAll("00:00:00.000", ""),
+                            events.fecha.toString().replaceAll("00:00:00.", ""),
                             style: AppTheme.of(context).bodyText3,
                           ),
                         ),
@@ -124,7 +123,6 @@ class _MyProductList extends State<ProductList> {
           );
         },
       );
-
 
   Padding makeCard(Events events, int itemNo) => Padding(
         padding: const EdgeInsets.all(8.0),
@@ -153,13 +151,21 @@ class _MyProductList extends State<ProductList> {
 
   @override
   Widget build(BuildContext context) {
+    
     return BlocBuilder<CartBloc, CartState>(builder: (_, cartState) {
       bool isGridView = cartState.isGridView;
       if (isGridView) {
         return LayoutBuilder(builder: (context, constraints) {
+          
           return StreamBuilder<List<Events>>(
             stream: readEvents(),
             builder: (context, snapshot) {
+              // if (snapshot.data.isEmpty) {
+              //   return const SizedBox(
+              //     height: 300.0,
+              //     child: Center(child: Text("Por el momento no hay eventos")),
+              //   );
+              // }
               if (snapshot.hasError) {
                 return Text('Hubo un problema! ${snapshot.error}');
               } else if (snapshot.hasData) {

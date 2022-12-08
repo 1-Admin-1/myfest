@@ -9,16 +9,16 @@ import 'bloc/event/cart_event.dart';
 import 'models/dataEvents.dart';
 import 'widgets/count_controller.dart';
 
-class ProductDetailWidget extends StatefulWidget {
-  const ProductDetailWidget({Key? key, required this.events}) : super(key: key);
+class PartyDetailWidget extends StatefulWidget {
+  const PartyDetailWidget({Key? key, required this.events}) : super(key: key);
 
   final Events events;
 
   @override
-  _ProductDetailWidgetState createState() => _ProductDetailWidgetState();
+  _PartyDetailWidgetState createState() => _PartyDetailWidgetState();
 }
 
-class _ProductDetailWidgetState extends State<ProductDetailWidget>
+class _PartyDetailWidgetState extends State<PartyDetailWidget>
     with TickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   int? countControllerValue;
@@ -251,3 +251,16 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget>
     );
   }
 }
+
+// confirmAppointment(
+//     Appointment appointment, ValueChanged<Appointment> update) async {
+//   appointment.status = "confirmed";
+
+//   await apptCollection
+//       .doc(appointment.id)
+//       .set(appointment.toJson())
+//       .then((value) {
+//     sendNotificationToUser(appointment: appointment);
+//     update(appointment);
+//   });
+// }

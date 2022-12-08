@@ -141,7 +141,7 @@ class _RegisterPageState extends State<PageCreate> {
                   // If the form is true (valid), or false.
                   if (keyForm.currentState!.validate()) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Processing Data')),
+                      const SnackBar(content: Text('Procesando Datos')),
                     );
                   }
                   final events = Events(

@@ -40,17 +40,15 @@ class Events {
   String userEmail;
 
   Events(
-      {
-      this.id = '',
+      {this.id = '',
       required this.title,
       required this.descripcion,
       required this.fecha,
       required this.direccion,
       required this.numeroDireccion,
-      required this.userEmail
-      });
+      required this.userEmail});
   Map<String, dynamic> toJson() => {
-        
+        'id': id,
         'title': title,
         'descripcion': descripcion,
         'fecha': fecha,
@@ -66,5 +64,42 @@ class Events {
         direccion: json['direccion'],
         numeroDireccion: json['numeroDireccion'],
         userEmail: json['user_email'],
+      );
+}
+
+class Users {
+  late String id;
+  String nombre;
+  String direccionResidencia;
+  String email;
+  String numeroTelefono;
+  int edad;
+  String ubicacionImg;
+
+  Users(
+      {this.id = '',
+      this.ubicacionImg='',
+      required this.nombre,
+      required this.direccionResidencia,
+      required this.email,
+      required this.numeroTelefono,
+      required this.edad});
+  Map<String, dynamic> toJson() => {
+      'id': id,
+      'nombre': nombre,
+      'ubicacionImg': ubicacionImg,
+      'direccionResidencia':direccionResidencia,
+      'email':email,
+      'numeroTelefono':numeroTelefono,
+      'edad': edad,
+      };
+  static Users fromJson(Map<String, dynamic> json) => Users(
+        id: json['id'],
+        nombre: json['nombre'],
+        direccionResidencia: json['direccionResidencia'],
+        email: json['email'],
+        edad: json['edad'],
+        numeroTelefono: json['numeroTelefono'],
+        ubicacionImg: json['ubicacionImg']
       );
 }

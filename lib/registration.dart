@@ -1,5 +1,6 @@
 import 'package:MyFest/Utils.dart';
 import 'package:MyFest/main.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:email_validator/email_validator.dart';
+import 'package:MyFest/models/dataEvents.dart';
 
 // Create a Form widget.
 class PageRegistration extends StatefulWidget {
@@ -248,6 +250,7 @@ class MainFormState extends State<PageRegistration> {
   // }
 
   Future signUp() async {
+
     final isValid = formKey.currentState!.validate();
     if (!isValid) return;
 
@@ -258,8 +261,23 @@ class MainFormState extends State<PageRegistration> {
               child: CircularProgressIndicator(),
             ));
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+         
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailCtrl.text.trim(), password: passwordCtrl.text.trim());
+          if (formKey.currentState!.validate()) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Procesando datos...')),
+                    );
+                  }
+                  final users = Users(
+                    numeroTelefono: mobileCtrl.text, 
+                    direccionResidencia: directionCtrl.text, 
+                    edad: int.parse(ageCtrl.text), 
+                    email: emailCtrl.text, 
+                    nombre: nameCtrl.text,
+                      );
+                  createUser(users: users);
+                  Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       
         print(e);
@@ -268,4 +286,16 @@ class MainFormState extends State<PageRegistration> {
     // Navigator.of(context) not working!
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
+
+   Future createUser({required Users users}) async {
+    final docUser = FirebaseFirestore.instance.collection('users').doc();
+    users.id = docUser.id;
+    final json = users.toJson();
+    await docUser.set(json);
+  }
+
 }
+
+
+        
+ 

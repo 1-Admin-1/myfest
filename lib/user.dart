@@ -16,15 +16,15 @@ class _ProfilePageState extends State<PageUser> {
   final user = FirebaseAuth.instance.currentUser!;
   @override
   Widget build(BuildContext context) {
-    final userJson = UserPreferences.myUser;
-    final usersnapshot = FirebaseFirestore.instance
-        .collection('users')
-        .snapshots()
-        .map((snapshot) =>
-            snapshot.docs.map((doc) => Users.fromJson(doc.data())).toList());
-    final usersProfile = usersnapshot.toList();
-    Future<int> count = usersnapshot.length;
-    Users users = usersProfile[count];
+    // final userJson = UserPreferences.myUser;
+    // final usersnapshot = FirebaseFirestore.instance
+    //     .collection('users')
+    //     .snapshots()
+    //     .map((snapshot) =>
+    //         snapshot.docs.map((doc) => Users.fromJson(doc.data())).toList());
+    // final usersProfile = usersnapshot.toList();
+    // Future<int> count = usersnapshot.length;
+    // Users users = usersProfile[count];
     return Scaffold(
       body: ListView(
         physics: BouncingScrollPhysics(),
@@ -46,7 +46,7 @@ class _ProfilePageState extends State<PageUser> {
           ),
           const SizedBox(height: 24),
           ProfileWidget(
-            imagePath: userJson.imagePath,
+            imagePath: 'userJson.imagePath',
             onClicked: () async {},
           ),
           const SizedBox(height: 24),

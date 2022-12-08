@@ -260,7 +260,7 @@ class _MapScreen extends State<PageMap> {
         ],
       ),
       floatingActionButton: SpeedDial(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.white,
         animatedIcon: AnimatedIcons.menu_close,
         overlayColor: Colors.black,
         overlayOpacity: 0.5,
