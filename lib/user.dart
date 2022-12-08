@@ -1,5 +1,5 @@
-
-
+import 'package:MyFest/models/dataEvents.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'user_preferences.dart';
@@ -17,27 +17,31 @@ class _ProfilePageState extends State<PageUser> {
   @override
   Widget build(BuildContext context) {
     final userJson = UserPreferences.myUser;
-
+    final usersnapshot = FirebaseFirestore.instance
+        .collection('users')
+        .snapshots()
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => Users.fromJson(doc.data())).toList());
+    final usersProfile = usersnapshot.toList();
+    Future<int> count = usersnapshot.length;
+    Users users = usersProfile[count];
     return Scaffold(
-      
       body: ListView(
-        
         physics: BouncingScrollPhysics(),
         children: [
           Padding(
             padding: EdgeInsets.only(left: 250),
-            child:ElevatedButton.icon(
+            child: ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xff212328),
                 minimumSize: Size.fromHeight(50),
               ),
-              icon: Icon(Icons.arrow_back), 
+              icon: Icon(Icons.arrow_back),
               label: Text(
                 'Cerrar Sesion',
                 style: TextStyle(color: Color(0xfff70506)),
               ),
               onPressed: () => FirebaseAuth.instance.signOut(),
-
             ),
           ),
           const SizedBox(height: 24),
@@ -106,4 +110,4 @@ class _ProfilePageState extends State<PageUser> {
 //           ],
 //         ),
 //       );
- }
+}
