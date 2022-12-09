@@ -13,6 +13,7 @@ class PartyDetailWidget extends StatefulWidget {
   const PartyDetailWidget({Key? key, required this.events}) : super(key: key);
 
   final Events events;
+  
 
   @override
   _PartyDetailWidgetState createState() => _PartyDetailWidgetState();

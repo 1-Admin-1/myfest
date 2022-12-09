@@ -1,10 +1,11 @@
 // ignore_for_file: use_key_in_widget_constructors
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'map.dart';
+import 'Map.dart';
 import 'party.dart';
 import 'user.dart';
 import 'create.dart';
-import 'griddashboard.dart';
+import 'home_widget.dart';
 
 
 //backgroundImage: AssetImage('assets/images/pin1.png'),
@@ -48,18 +49,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     
     return Scaffold(
-      // appBar: AppBar(
-      //     backgroundColor: Colors.black,
-      //     title: Row(
-      //       mainAxisAlignment: MainAxisAlignment.start,
-      //       children: <Widget>[
-      //         Image.asset(
-      //           'assets/images/logoNombre.png',
-      //           fit: BoxFit.cover,
-      //           height: 45.0,
-      //         ),
-      //       ],
-      //     )),
       appBar: AppBar(
           backgroundColor: Colors.black,
           title: Row(
@@ -245,55 +234,13 @@ class _MyHomePageState extends State<PageHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body:
-        Column(
-          
+      body: Column(
           children: <Widget>[
-            const SizedBox(height: 20,),
+            
+            SizedBox(height: 20,),
             GridDashboard()
           ],
         ),
-      // Column(
-      //   children: <Widget>[
-      //     // Container(
-      //     //   color: Color.fromARGB(255, 0, 0, 0),
-      //     //   width: double.infinity,
-      //     //   height: 70,
-      //     //   child: Padding(
-      //     //     padding: const EdgeInsets.symmetric(vertical: 15.0),
-      //     //     child: Center(
-      //     //           child: Image.asset(
-      //     //         "assets/images/logo1.png",
-      //     //         fit: BoxFit.cover,
-      //     //       )),
-      //     //   ),
-      //     // ),
-      //     Expanded(
-      //       child: Container(
-      //         color: const Color(0xff212328),
-      //         padding: EdgeInsets.all(50),
-      //         child: VerticalCardPager(
-      //           textStyle: const TextStyle(color: Colors.transparent),
-      //           titles: titles,
-      //           images: images,
-      //           onPageChanged: (page) {
-      //             print(page);
-      //           },
-      //           onSelectedItem: (index) {
-      //             Navigator.push(
-      //               context,
-      //               MaterialPageRoute(
-      //                   builder: (context) => DetailView(
-      //                         champion:
-      //                             championsMap[titles[index].toLowerCase()]!,
-      //                       )),
-      //             );
-      //           },
-      //         ),
-      //       ),
-      //     ),
-      //   ],
-      // ),
     );
   }
 }

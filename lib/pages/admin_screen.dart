@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:MyFest/helper_functions.dart';
-import '../appt_model.dart';
-import '../main.dart';
+import 'package:MyFest/models/dataEvents.dart';
+import '../Main.dart';
 
 final db = FirebaseFirestore.instance;
-final apptCollection = db.collection('events').doc('9Yp9OPYkWfZqjh1usOoa').collection('listAttendance');
+final apptCollection = db
+    .collection('events')
+    .doc('9Yp9OPYkWfZqjh1usOoa')
+    .collection('listAttendance');
 const haircutColor = Colors.brown;
 const massageColor = Colors.green;
 const manicureColor = Colors.blue;
@@ -24,6 +26,12 @@ initializeAdminToken() async {
     apptCollection.doc("tokens").update({'admin-token': token});
   });
 }
+
+Stream<List<Events>> readEvents() => FirebaseFirestore.instance
+    .collection('events')
+    .snapshots()
+    .map((snapshot) =>
+        snapshot.docs.map((doc) => Events.fromJson(doc.data())).toList());
 
 class _AdminHomePageState extends State<AdminHomePage> {
   //Update Admin token on Login
@@ -44,7 +52,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
             Container(
               height: 200.0,
               decoration: const BoxDecoration(
-                  color: MyApp.primaryColor,
+                  color: Colors.amber,
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(30.0),
                     bottomRight: Radius.circular(30.0),
@@ -113,13 +121,13 @@ class Schedule extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.only(bottom: 20.0),
         child: StreamBuilder(
-          stream: getAppointments,
-          builder: ((context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          stream: readEvents(),
+          builder: ((context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             }
 
-            if (snapshot.data!.docs.isEmpty) {
+            if (snapshot.hasData) {
               return const SizedBox(
                 height: 300.0,
                 child: Center(
@@ -128,24 +136,19 @@ class Schedule extends StatelessWidget {
             }
 
             if (snapshot.hasData) {
-              List<Appointment> appts = [];
+              List<Events> events = [];
 
-              for (var doc in snapshot.data!.docs) {
-                final appt =
-                    Appointment.fromJson(doc.data() as Map<String, dynamic>);
-
-                appts.add(appt);
-              }
+              
               return SizedBox(
                 height: 300.0,
                 child: ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: appts.length,
+                  itemCount: events.length,
                   itemBuilder: (context, index) {
                     return GestureDetector(
                         onTap: () => Navigator.of(context)
-                            .pushNamed('/details', arguments: appts[index]),
-                        child: ScheduleCard(appts[index]));
+                            .pushNamed('/details', arguments: events[index]),
+                        child: ScheduleCard(events[index]));
                   },
                 ),
               );
@@ -161,33 +164,40 @@ class Schedule extends StatelessWidget {
 DateTime now = DateTime.now();
 DateTime today = DateTime(now.year, now.month, now.day);
 
+// final Stream<QuerySnapshot> getAppointments = apptCollection
+//     .orderBy('time')
+//     .where('time', isGreaterThanOrEqualTo: Timestamp.fromDate(today))
+//     .snapshots();
 final Stream<QuerySnapshot> getAppointments = apptCollection
     .orderBy('time')
     .where('time', isGreaterThanOrEqualTo: Timestamp.fromDate(today))
     .snapshots();
 
 class ScheduleCard extends StatelessWidget {
-  final Appointment appointment;
-  const ScheduleCard(this.appointment);
+  // final Appointment appointment;
+  final Events events;
+  
+  // const ScheduleCard(this.appointment);
+  const ScheduleCard(this.events, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var cardColor;
 
-    switch (appointment.service.toLowerCase()) {
-      case "haircut":
-        cardColor = haircutColor;
-        break;
-      case "massage":
-        cardColor = massageColor;
-        break;
-      case "manicure":
-        cardColor = manicureColor;
-        break;
-      case "pedicure":
-        cardColor = pedicureColor;
-        break;
-    }
+    // switch (appointment.service.toLowerCase()) {
+    //   case "haircut":
+    //     cardColor = haircutColor;
+    //     break;
+    //   case "massage":
+    //     cardColor = massageColor;
+    //     break;
+    //   case "manicure":
+    //     cardColor = manicureColor;
+    //     break;
+    //   case "pedicure":
+    //     cardColor = pedicureColor;
+    //     break;
+    // }
 
     return Container(
       height: 50.0,
@@ -221,22 +231,25 @@ class ScheduleCard extends StatelessWidget {
                           children: [
                             SizedBox(
                                 width: 110.0,
-                                child: Text(appointment.name,
+                                child: Text(events.title,
                                     overflow: TextOverflow.ellipsis)),
 
                             //Appointmemt date
-                            Text(checkDate(appointment.time)),
+                            // Text(checkDate(events.title)),
+                            Text(events.title),
 
                             //Appointment time
-                            Text(getTime(appointment.time)),
+                            // Text(getTime(appointment.time)),
                           ]),
                       Text(
-                        appointment.status,
-                        style: TextStyle(
+                        // appointment.status,
+                        events.title,
+                        style: const TextStyle(
                             fontSize: 12.0,
-                            color: appointment.status == 'pending'
-                                ? Colors.red
-                                : Colors.green,
+                            color: Colors.green,
+                            // color: appointment.status == 'pending'
+                            //     ? Colors.red
+                            //     : Colors.green,
                             fontWeight: FontWeight.bold),
                       )
                     ],

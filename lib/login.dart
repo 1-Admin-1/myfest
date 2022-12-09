@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:MyFest/Utils.dart';
-import 'package:MyFest/main.dart';
+import 'package:MyFest/Main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

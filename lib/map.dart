@@ -4,7 +4,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:location/location.dart' as lc;
 
 import 'package:permission_handler/permission_handler.dart';
-import 'MarkerInformation.dart';
+import 'marker_information.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PageMap extends StatefulWidget {
@@ -142,14 +142,14 @@ class _MapScreen extends State<PageMap> {
           "Ubicacion actual del usuario latitud${currentLocation.latitude} longitud${currentLocation.longitude}");
       setState(() {
         currentLocation = currentLocation;
-        controller.animateCamera(CameraUpdate.newCameraPosition(
-          CameraPosition(
-              target:
-                  LatLng(currentLocation.latitude, currentLocation.longitude),
-              zoom: 16),
-        ));
+        // createCircle();
+        // controller.animateCamera(CameraUpdate.newCameraPosition(
+        //   CameraPosition(
+        //       target:
+        //           LatLng(currentLocation.latitude, currentLocation.longitude),
+        //       zoom: 16),
+        // ));
         createMarker();
-        createCircle();
       });
       
     }

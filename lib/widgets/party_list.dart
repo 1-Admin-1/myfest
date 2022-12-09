@@ -41,6 +41,7 @@ class _MyProductList extends State<PartyList> {
         openBuilder: (BuildContext _, VoidCallback openContainer) {
           return PartyDetailWidget(
             events: events,
+            
           );
         },
         closedShape: const RoundedRectangleBorder(),
@@ -110,7 +111,7 @@ class _MyProductList extends State<PartyList> {
                           padding:
                               const EdgeInsetsDirectional.fromSTEB(8, 4, 0, 0),
                           child: Text(
-                            events.fecha.toString().replaceAll("00:00:00.", ""),
+                            events.fecha.toString().replaceAll("00:00:00.000", ""),
                             style: AppTheme.of(context).bodyText3,
                           ),
                         ),

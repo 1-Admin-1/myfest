@@ -132,22 +132,6 @@ class _ProductListingWidgetState extends State<ProductListingWidget> {
               ),
             ),
           ),
-          // Padding(
-          //   padding: EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.end,
-          //     children: [
-          //       BlocBuilder<CartBloc, CartState>(builder: (_, cartState) {
-          //         bool isGridView = cartState.isGridView;
-          //         return IconButton(
-          //             onPressed: () {
-          //               BlocProvider.of<CartBloc>(context).add(ChangeGallaryView(!isGridView));
-          //             },
-          //             icon: !isGridView ? Icon(Icons.grid_on) : Icon(Icons.list));
-          //       }),
-          //     ],
-          //   ),
-          // ),
           Expanded(
             child: PartyList(
              

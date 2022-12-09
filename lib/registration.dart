@@ -1,5 +1,5 @@
 import 'package:MyFest/Utils.dart';
-import 'package:MyFest/main.dart';
+import 'package:MyFest/Main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -288,7 +288,7 @@ class MainFormState extends State<PageRegistration> {
   }
 
    Future createUser({required Users users}) async {
-    final docUser = FirebaseFirestore.instance.collection('users').doc();
+    final docUser = FirebaseFirestore.instance.collection('users').doc(users.email);
     users.id = docUser.id;
     final json = users.toJson();
     await docUser.set(json);

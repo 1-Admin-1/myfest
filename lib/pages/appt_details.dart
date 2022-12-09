@@ -1,9 +1,8 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:MyFest/appt_model.dart';
+import 'package:MyFest/models/dataEvents.dart';
 import 'package:MyFest/pages/admin_screen.dart';
-import '../helper_functions.dart';
-import '../main.dart';
+import '../Main.dart';
 
 class AppointmentDetails extends StatefulWidget {
   final Appointment appointment;
@@ -32,12 +31,12 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
         borderRadius: BorderRadius.circular(15),
         color: widget.appointment.status == "confirmed"
             ? Colors.grey
-            : MyApp.primaryColor,
+            : Colors.red,
         child: MaterialButton(
           minWidth: MediaQuery.of(context).size.width,
           onPressed: () => widget.appointment.status == "confirmed"
               ? null
-              : confirmAppointment(widget.appointment, editAppointment),
+              : null,
           child: const Text(
             "Confirm",
             style: TextStyle(color: Colors.white),
@@ -53,9 +52,9 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
           const SizedBox(height: 20.0),
           BuildRow(title: "Name", details: widget.appointment.name),
           BuildRow(title: "Service", details: widget.appointment.service),
-          BuildRow(title: "Date", details: getDate(widget.appointment.time)),
+          BuildRow(title: "Date", details: widget.appointment.time),
           BuildRow(
-              title: "Time", details: "${getTime(widget.appointment.time)}"),
+              title: "Time", details: "(widget.appointment.time)}"),
           BuildRow(title: "Status", details: widget.appointment.status),
           const SizedBox(height: 20.0),
           confirmBtn
@@ -65,18 +64,6 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
   }
 }
 
-confirmAppointment(
-    Appointment appointment, ValueChanged<Appointment> update) async {
-  appointment.status = "confirmed";
-
-  await apptCollection
-      .doc(appointment.id)
-      .set(appointment.toJson())
-      .then((value) {
-    sendNotificationToUser(appointment: appointment);
-    update(appointment);
-  });
-}
 
 class BuildRow extends StatelessWidget {
   final title;

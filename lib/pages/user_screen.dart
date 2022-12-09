@@ -1,414 +1,414 @@
-import 'dart:developer';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:MyFest/appt_model.dart';
-import 'package:MyFest/main.dart';
+// import 'dart:developer';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:flutter/cupertino.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_slidable/flutter_slidable.dart';
+// import 'package:MyFest/appt_model.dart';
+// import 'package:MyFest/main.dart';
 
-import 'admin_screen.dart';
-import '../helper_functions.dart';
+// import 'admin_screen.dart';
+// import '../helper_functions.dart';
 
-String _user = "";
-bool _editForm = false;
-String _editApptId = "";
+// String _user = "";
+// bool _editForm = false;
+// String _editApptId = "";
 
-class UserHomePage extends StatefulWidget {
-  const UserHomePage({Key? key}) : super(key: key);
+// class UserHomePage extends StatefulWidget {
+//   const UserHomePage({Key? key}) : super(key: key);
 
-  @override
-  State<UserHomePage> createState() => _UserHomePageState();
-}
+//   @override
+//   State<UserHomePage> createState() => _UserHomePageState();
+// }
 
-initializeUserToken() async {
-  await FirebaseMessaging.instance.getToken().then((token) {
-    apptCollection.doc("tokens").update({'user-token': token});
-  });
-}
+// initializeUserToken() async {
+//   await FirebaseMessaging.instance.getToken().then((token) {
+//     apptCollection.doc("tokens").update({'user-token': token});
+//   });
+// }
 
-class _UserHomePageState extends State<UserHomePage> {
-  //Update User token on Login
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    initializeUserToken();
-  }
+// class _UserHomePageState extends State<UserHomePage> {
+//   //Update User token on Login
+//   @override
+//   void initState() {
+//     // TODO: implement initState
+//     super.initState();
+//     initializeUserToken();
+//   }
 
-  String? _service;
-  DateTime time = DateTime.now();
-  bool showDate = false;
+//   String? _service;
+//   DateTime time = DateTime.now();
+//   bool showDate = false;
 
-  final _serviceList = ["Haircut", "Massage", "Manicure", "Pedicure"];
+//   final _serviceList = ["Haircut", "Massage", "Manicure", "Pedicure"];
 
-  final _nameController = TextEditingController();
-  final _searchController = TextEditingController();
+//   final _nameController = TextEditingController();
+//   final _searchController = TextEditingController();
 
-  @override
-  Widget build(BuildContext context) {
-    var args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
-    if (args != null) {
-      _user = args['name'];
-    }
+//   @override
+//   Widget build(BuildContext context) {
+//     var args =
+//         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+//     if (args != null) {
+//       _user = args['name'];
+//     }
 
-    final nameField = Container(
-        decoration: BoxDecoration(
-          border: Border.all(width: 1.0, color: Colors.grey.shade300),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: TextFormField(
-          autofocus: false,
-          controller: _nameController,
-          keyboardType: TextInputType.emailAddress,
-          textInputAction: TextInputAction.next,
-          decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.person),
-              contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-              hintText: "Name",
-              border: InputBorder.none),
-        ));
+//     final nameField = Container(
+//         decoration: BoxDecoration(
+//           border: Border.all(width: 1.0, color: Colors.grey.shade300),
+//           borderRadius: BorderRadius.circular(10.0),
+//         ),
+//         child: TextFormField(
+//           autofocus: false,
+//           controller: _nameController,
+//           keyboardType: TextInputType.emailAddress,
+//           textInputAction: TextInputAction.next,
+//           decoration: const InputDecoration(
+//               prefixIcon: Icon(Icons.person),
+//               contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+//               hintText: "Name",
+//               border: InputBorder.none),
+//         ));
 
-    final searchField = Container(
-        height: 50.0,
-        decoration: BoxDecoration(
-          border: Border.all(width: 1.0, color: Colors.grey.shade300),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: TextFormField(
-          autofocus: false,
-          controller: _searchController,
-          decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.search),
-              contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-              hintText: "Search for",
-              border: InputBorder.none),
-        ));
+//     final searchField = Container(
+//         height: 50.0,
+//         decoration: BoxDecoration(
+//           border: Border.all(width: 1.0, color: Colors.grey.shade300),
+//           borderRadius: BorderRadius.circular(10.0),
+//         ),
+//         child: TextFormField(
+//           autofocus: false,
+//           controller: _searchController,
+//           decoration: const InputDecoration(
+//               prefixIcon: Icon(Icons.search),
+//               contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+//               hintText: "Search for",
+//               border: InputBorder.none),
+//         ));
 
-    final serviceDropDown = SizedBox(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Container(
-        height: 50.0,
-        padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-        decoration: BoxDecoration(
-          border: Border.all(width: 1.0, color: Colors.grey.shade300),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: DropdownButton(
-          dropdownColor: Colors.white,
-          icon: const Icon(Icons.arrow_drop_down),
-          iconSize: 28,
-          hint: const Text("Select Service"),
-          disabledHint: const Text("Select Service"),
-          underline: const SizedBox(),
-          isExpanded: true,
-          value: _service,
-          onChanged: (newValue) {
-            setState(() {
-              _service = newValue.toString();
-            });
-          },
-          items: _serviceList.map((valueItem) {
-            return DropdownMenuItem(value: valueItem, child: Text(valueItem));
-          }).toList(),
-        ),
-      ),
-    ]));
+//     final serviceDropDown = SizedBox(
+//         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+//       Container(
+//         height: 50.0,
+//         padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+//         decoration: BoxDecoration(
+//           border: Border.all(width: 1.0, color: Colors.grey.shade300),
+//           borderRadius: BorderRadius.circular(10.0),
+//         ),
+//         child: DropdownButton(
+//           dropdownColor: Colors.white,
+//           icon: const Icon(Icons.arrow_drop_down),
+//           iconSize: 28,
+//           hint: const Text("Select Service"),
+//           disabledHint: const Text("Select Service"),
+//           underline: const SizedBox(),
+//           isExpanded: true,
+//           value: _service,
+//           onChanged: (newValue) {
+//             setState(() {
+//               _service = newValue.toString();
+//             });
+//           },
+//           items: _serviceList.map((valueItem) {
+//             return DropdownMenuItem(value: valueItem, child: Text(valueItem));
+//           }).toList(),
+//         ),
+//       ),
+//     ]));
 
-    final datePicker = Visibility(
-      visible: showDate,
-      child: SizedBox(
-        height: 220.0,
-        child: CupertinoDatePicker(
-            initialDateTime: DateTime.now(),
-            onDateTimeChanged: ((value) => setState(() {
-                  time = value;
-                }))),
-      ),
-    );
+//     final datePicker = Visibility(
+//       visible: showDate,
+//       child: SizedBox(
+//         height: 220.0,
+//         child: CupertinoDatePicker(
+//             initialDateTime: DateTime.now(),
+//             onDateTimeChanged: ((value) => setState(() {
+//                   time = value;
+//                 }))),
+//       ),
+//     );
 
-    final selectedDateAndTime = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            const Text("Date: ", style: TextStyle(fontWeight: FontWeight.bold)),
-            const SizedBox(width: 10.0),
-            Text("${time.toLocal()}".split(' ')[0]),
-          ],
-        ),
-        const SizedBox(height: 20.0),
-        Row(
-          children: [
-            const Text("Time: ", style: TextStyle(fontWeight: FontWeight.bold)),
-            const SizedBox(width: 10.0),
-            Text(getTime(time.toLocal())),
-          ],
-        ),
-        const SizedBox(height: 15.0),
-      ],
-    );
+//     final selectedDateAndTime = Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         Row(
+//           children: [
+//             const Text("Date: ", style: TextStyle(fontWeight: FontWeight.bold)),
+//             const SizedBox(width: 10.0),
+//             Text("${time.toLocal()}".split(' ')[0]),
+//           ],
+//         ),
+//         const SizedBox(height: 20.0),
+//         Row(
+//           children: [
+//             const Text("Time: ", style: TextStyle(fontWeight: FontWeight.bold)),
+//             const SizedBox(width: 10.0),
+//             Text(getTime(time.toLocal())),
+//           ],
+//         ),
+//         const SizedBox(height: 15.0),
+//       ],
+//     );
 
-    const txtHeader = Center(
-        child: Text("Book Appointment", style: TextStyle(fontSize: 24.0)));
+//     const txtHeader = Center(
+//         child: Text("Book Appointment", style: TextStyle(fontSize: 24.0)));
 
-    final btnShowDate = Material(
-        color: Colors.transparent,
-        child: MaterialButton(
-          padding: EdgeInsets.zero,
-          onPressed: () {
-            setState(() {
-              showDate = !showDate;
-            });
-          },
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: const [
-              Text(
-                "Say when",
-                style: TextStyle(
-                    color: MyApp.primaryColor,
-                    decoration: TextDecoration.underline),
-              ),
-              SizedBox(width: 10.0),
-              Icon(Icons.alarm, color: MyApp.primaryColor)
-            ],
-          ),
-        ));
+//     final btnShowDate = Material(
+//         color: Colors.transparent,
+//         child: MaterialButton(
+//           padding: EdgeInsets.zero,
+//           onPressed: () {
+//             setState(() {
+//               showDate = !showDate;
+//             });
+//           },
+//           child: Row(
+//             mainAxisSize: MainAxisSize.min,
+//             children: const [
+//               Text(
+//                 "Say when",
+//                 style: TextStyle(
+//                     color: MyApp.primaryColor,
+//                     decoration: TextDecoration.underline),
+//               ),
+//               SizedBox(width: 10.0),
+//               Icon(Icons.alarm, color: MyApp.primaryColor)
+//             ],
+//           ),
+//         ));
 
-    final btnSubmit = Material(
-        elevation: 5.0,
-        borderRadius: BorderRadius.circular(15),
-        color: MyApp.primaryColor,
-        child: MaterialButton(
-          minWidth: MediaQuery.of(context).size.width,
-          onPressed: () {
-            if (_nameController.text.isNotEmpty && _service != null) {
-              Appointment appt = Appointment(
-                  name: _nameController.text,
-                  service: _service!,
-                  status: "pending",
-                  time: time);
+//     final btnSubmit = Material(
+//         elevation: 5.0,
+//         borderRadius: BorderRadius.circular(15),
+//         color: MyApp.primaryColor,
+//         child: MaterialButton(
+//           minWidth: MediaQuery.of(context).size.width,
+//           onPressed: () {
+//             if (_nameController.text.isNotEmpty && _service != null) {
+//               Appointment appt = Appointment(
+//                   name: _nameController.text,
+//                   service: _service!,
+//                   status: "pending",
+//                   time: time);
 
-              //If Form is in Edit state, call updateAppointment() on Button click if not, call bookSession()
-              !_editForm
-                  ? bookSession(appointment: appt)
-                  : updateAppointment(Appointment(
-                      name: _nameController.text,
-                      service: _service!,
-                      time: time,
-                      status: "pending",
-                      id: _editApptId));
-              setState(() {
-                _user = _nameController.text;
-                _nameController.clear();
-                _service = null;
-                time = DateTime.now();
-              });
-            } else {
-              log("Please enter all fields!");
-            }
-          },
-          child: Text(
-            !_editForm ? "Book" : "Update",
-            style: const TextStyle(color: Colors.white),
-          ),
-        ));
+//               //If Form is in Edit state, call updateAppointment() on Button click if not, call bookSession()
+//               !_editForm
+//                   ? bookSession(appointment: appt)
+//                   : updateAppointment(Appointment(
+//                       name: _nameController.text,
+//                       service: _service!,
+//                       time: time,
+//                       status: "pending",
+//                       id: _editApptId));
+//               setState(() {
+//                 _user = _nameController.text;
+//                 _nameController.clear();
+//                 _service = null;
+//                 time = DateTime.now();
+//               });
+//             } else {
+//               log("Please enter all fields!");
+//             }
+//           },
+//           child: Text(
+//             !_editForm ? "Book" : "Update",
+//             style: const TextStyle(color: Colors.white),
+//           ),
+//         ));
 
-    final btnSearch = Material(
-        elevation: 5.0,
-        borderRadius: BorderRadius.circular(15),
-        color: MyApp.primaryColor,
-        child: MaterialButton(
-          onPressed: () {
-            if (_searchController.text.isNotEmpty) {
-              setState(() {
-                _user = _searchController.text;
-              });
-            }
-          },
-          child: const Text(
-            "Search",
-            style: TextStyle(color: Colors.white),
-          ),
-        ));
+//     final btnSearch = Material(
+//         elevation: 5.0,
+//         borderRadius: BorderRadius.circular(15),
+//         color: MyApp.primaryColor,
+//         child: MaterialButton(
+//           onPressed: () {
+//             if (_searchController.text.isNotEmpty) {
+//               setState(() {
+//                 _user = _searchController.text;
+//               });
+//             }
+//           },
+//           child: const Text(
+//             "Search",
+//             style: TextStyle(color: Colors.white),
+//           ),
+//         ));
 
-    void editAppointment(Appointment appt) {
-      setState(() {
-        _nameController.text = appt.name;
-        _service = appt.service;
-        time = appt.time;
-        _editForm = true;
-        _editApptId = appt.id!;
-      });
-    }
+//     void editAppointment(Appointment appt) {
+//       setState(() {
+//         _nameController.text = appt.name;
+//         _service = appt.service;
+//         time = appt.time;
+//         _editForm = true;
+//         _editApptId = appt.id!;
+//       });
+//     }
 
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(),
-      body: SingleChildScrollView(
-        physics: const ClampingScrollPhysics(),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              txtHeader,
-              const SizedBox(height: 20.0),
-              nameField,
-              const SizedBox(height: 30.0),
-              serviceDropDown,
-              const SizedBox(height: 30.0),
-              selectedDateAndTime,
-              datePicker,
-              btnShowDate,
-              const SizedBox(height: 60.0),
-              btnSubmit,
-              const SizedBox(height: 20.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(child: searchField),
-                  const SizedBox(width: 20.0),
-                  btnSearch
-                ],
-              ),
-              const SizedBox(height: 20.0),
-              GetMyAppointments(user: _user, update: editAppointment),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+//     return Scaffold(
+//       resizeToAvoidBottomInset: true,
+//       appBar: AppBar(),
+//       body: SingleChildScrollView(
+//         physics: const ClampingScrollPhysics(),
+//         child: Padding(
+//           padding: const EdgeInsets.all(20.0),
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               txtHeader,
+//               const SizedBox(height: 20.0),
+//               nameField,
+//               const SizedBox(height: 30.0),
+//               serviceDropDown,
+//               const SizedBox(height: 30.0),
+//               selectedDateAndTime,
+//               datePicker,
+//               btnShowDate,
+//               const SizedBox(height: 60.0),
+//               btnSubmit,
+//               const SizedBox(height: 20.0),
+//               Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                 children: [
+//                   Expanded(child: searchField),
+//                   const SizedBox(width: 20.0),
+//                   btnSearch
+//                 ],
+//               ),
+//               const SizedBox(height: 20.0),
+//               GetMyAppointments(user: _user, update: editAppointment),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
-bookSession({required Appointment appointment}) async {
-  final docRef = apptCollection.doc();
-  Appointment appt = Appointment(
-      name: appointment.name,
-      time: appointment.time,
-      service: appointment.service,
-      status: "pending",
-      id: docRef.id);
+// bookSession({required Appointment appointment}) async {
+//   final docRef = apptCollection.doc();
+//   Appointment appt = Appointment(
+//       name: appointment.name,
+//       time: appointment.time,
+//       service: appointment.service,
+//       status: "pending",
+//       id: docRef.id);
 
-  await docRef.set(appt.toJson()).then(
-      (value) => log("Appointment booked successfully!"),
-      onError: (e) => log("Error booking appointment: $e"));
+//   await docRef.set(appt.toJson()).then(
+//       (value) => log("Appointment booked successfully!"),
+//       onError: (e) => log("Error booking appointment: $e"));
 
-  //Send Notifcation to Admin after Booking Session
-  await sendNotificationToAdmin(appointment: appt);
-}
+//   //Send Notifcation to Admin after Booking Session
+//   await sendNotificationToAdmin(appointment: appt);
+// }
 
-void updateAppointment(appt) {
-  //Set updated data for selected appointment
-  apptCollection.doc(appt.id).set(appt.toJson()).then(
-      (value) => log("Appointment updated Successfully!"),
-      onError: (e) => log("Error updating appointment: $e"));
+// void updateAppointment(appt) {
+//   //Set updated data for selected appointment
+//   apptCollection.doc(appt.id).set(appt.toJson()).then(
+//       (value) => log("Appointment updated Successfully!"),
+//       onError: (e) => log("Error updating appointment: $e"));
 
-  _editForm = false;
-}
+//   _editForm = false;
+// }
 
-void deleteAppointment(appt) {
-  //Delete selected appointment
-  apptCollection.doc(appt.id).delete().then(
-      (value) => log("Appointment deleted successfully!"),
-      onError: (e) => "Error deleting appointment: $e");
-}
+// void deleteAppointment(appt) {
+//   //Delete selected appointment
+//   apptCollection.doc(appt.id).delete().then(
+//       (value) => log("Appointment deleted successfully!"),
+//       onError: (e) => "Error deleting appointment: $e");
+// }
 
-class GetMyAppointments extends StatelessWidget {
-  final String user;
-  final ValueChanged<Appointment> update;
-  const GetMyAppointments(
-      {required this.user, required this.update});
+// class GetMyAppointments extends StatelessWidget {
+//   final String user;
+//   final ValueChanged<Appointment> update;
+//   const GetMyAppointments(
+//       {required this.user, required this.update});
 
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-        height: 300.0,
-        child: StreamBuilder(
-          stream: getMyAppointments(user),
-          builder: ((context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
+//   @override
+//   Widget build(BuildContext context) {
+//     return SizedBox(
+//         height: 300.0,
+//         child: StreamBuilder(
+//           stream: getMyAppointments(user),
+//           builder: ((context, AsyncSnapshot<QuerySnapshot> snapshot) {
+//             if (snapshot.connectionState == ConnectionState.waiting) {
+//               return const Center(child: CircularProgressIndicator());
+//             }
 
-            if (snapshot.data == null) {
-              return const SizedBox();
-            }
+//             if (snapshot.data == null) {
+//               return const SizedBox();
+//             }
 
-            if (snapshot.data!.docs.isEmpty) {
-              return SizedBox(
-                child: Center(
-                    child:
-                        Text("You haven't booked any appointment for $_user!")),
-              );
-            }
+//             if (snapshot.data!.docs.isEmpty) {
+//               return SizedBox(
+//                 child: Center(
+//                     child:
+//                         Text("You haven't booked any appointment for $_user!")),
+//               );
+//             }
 
-            if (snapshot.hasData) {
-              List<Appointment> appts = [];
+//             if (snapshot.hasData) {
+//               List<Appointment> appts = [];
 
-              for (var doc in snapshot.data!.docs) {
-                final appt =
-                    Appointment.fromJson(doc.data() as Map<String, dynamic>);
+//               for (var doc in snapshot.data!.docs) {
+//                 final appt =
+//                     Appointment.fromJson(doc.data() as Map<String, dynamic>);
 
-                appts.add(appt);
-              }
+//                 appts.add(appt);
+//               }
 
-              return ListView.builder(
-                itemCount: appts.length,
-                itemBuilder: (context, index) {
-                  return UserScheduleCard(appts[index], update: update);
-                },
-              );
-            }
+//               return ListView.builder(
+//                 itemCount: appts.length,
+//                 itemBuilder: (context, index) {
+//                   return UserScheduleCard(appts[index], update: update);
+//                 },
+//               );
+//             }
 
-            return const SizedBox();
-          }),
-        ));
-  }
-}
+//             return const SizedBox();
+//           }),
+//         ));
+//   }
+// }
 
-getMyAppointments(String user) {
-  if (user.isEmpty) {
-    return null;
-  }
-  return apptCollection.where('name', isEqualTo: _user).snapshots();
-}
+// getMyAppointments(String user) {
+//   if (user.isEmpty) {
+//     return null;
+//   }
+//   return apptCollection.where('name', isEqualTo: _user).snapshots();
+// }
 
-class UserScheduleCard extends StatelessWidget {
-  final Appointment appointment;
-  final ValueChanged<Appointment> update;
-  const UserScheduleCard(this.appointment, {required this.update});
+// class UserScheduleCard extends StatelessWidget {
+//   final Appointment appointment;
+//   final ValueChanged<Appointment> update;
+//   const UserScheduleCard(this.appointment, {required this.update});
 
-  @override
-  Widget build(BuildContext context) {
-    return Slidable(
-        startActionPane: ActionPane(
-          motion: const ScrollMotion(),
-          children: [
-            SlidableAction(
-              onPressed: (context) => update(appointment),
-              backgroundColor: Colors.blue,
-              foregroundColor: Colors.white,
-              icon: Icons.edit,
-              label: 'Edit',
-            ),
-          ],
-        ),
-        endActionPane: ActionPane(
-          motion: const ScrollMotion(),
-          children: [
-            SlidableAction(
-              onPressed: (context) => deleteAppointment(appointment),
-              backgroundColor: const Color(0xFFFE4A49),
-              foregroundColor: Colors.white,
-              icon: Icons.delete,
-              label: 'Delete',
-            ),
-          ],
-        ),
-        child: ScheduleCard(appointment));
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Slidable(
+//         startActionPane: ActionPane(
+//           motion: const ScrollMotion(),
+//           children: [
+//             SlidableAction(
+//               onPressed: (context) => update(appointment),
+//               backgroundColor: Colors.blue,
+//               foregroundColor: Colors.white,
+//               icon: Icons.edit,
+//               label: 'Edit',
+//             ),
+//           ],
+//         ),
+//         endActionPane: ActionPane(
+//           motion: const ScrollMotion(),
+//           children: [
+//             SlidableAction(
+//               onPressed: (context) => deleteAppointment(appointment),
+//               backgroundColor: const Color(0xFFFE4A49),
+//               foregroundColor: Colors.white,
+//               icon: Icons.delete,
+//               label: 'Delete',
+//             ),
+//           ],
+//         ),
+//         child: ScheduleCard(appointment));
+//   }
+// }
