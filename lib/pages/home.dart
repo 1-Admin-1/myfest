@@ -1,7 +1,8 @@
 // ignore_for_file: use_key_in_widget_constructors
+//Librerias
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+//Routes
 import 'party.dart';
 import 'user.dart';
 import 'map.dart';
@@ -76,7 +77,9 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
+  //Bottom appbar 
+  //Muestra las paginas con las que se puede interactuar
+  //Contador para mostrar todas las paginas segun el clic
   Container buildMyNavBar(BuildContext context) {
     return Container(
       height: 60,
@@ -180,55 +183,55 @@ class PageHome extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-final List<String> titles = [
-  "HOME",
-  "LOCATION",
-  "PARTY",
-  "USER",
-];
+// final List<String> titles = [
+//   "HOME",
+//   "LOCATION",
+//   "PARTY",
+//   "USER",
+// ];
 
-final List<Widget> images = [
-  Hero(
-    tag: "HOME",
-    child: ClipRRect(
-      borderRadius: BorderRadius.circular(20.0),
-      child: Image.asset(
-        "assets/images/home1.png",
-        fit: BoxFit.contain,
-      ),
-    ),
-  ),
-  Hero(
-    tag: "LOCATION",
-    child: ClipRRect(
-      borderRadius: BorderRadius.circular(20.0),
-      child: Image.asset(
-        "assets/images/location1.png",
-        fit: BoxFit.contain,
-      ),
-    ),
-  ),
-  Hero(
-    tag: "PARTY",
-    child: ClipRRect(
-      borderRadius: BorderRadius.circular(20.0),
-      child: Image.asset(
-        "assets/images/party1.png",
-        fit: BoxFit.contain,
-      ),
-    ),
-  ),
-  Hero(
-    tag: "USER",
-    child: ClipRRect(
-      borderRadius: BorderRadius.circular(20.0),
-      child: Image.asset(
-        "assets/images/user1.png",
-        fit: BoxFit.contain,
-      ),
-    ),
-  ),
-];
+// final List<Widget> images = [
+//   Hero(
+//     tag: "HOME",
+//     child: ClipRRect(
+//       borderRadius: BorderRadius.circular(20.0),
+//       child: Image.asset(
+//         "assets/images/home1.png",
+//         fit: BoxFit.contain,
+//       ),
+//     ),
+//   ),
+//   Hero(
+//     tag: "LOCATION",
+//     child: ClipRRect(
+//       borderRadius: BorderRadius.circular(20.0),
+//       child: Image.asset(
+//         "assets/images/location1.png",
+//         fit: BoxFit.contain,
+//       ),
+//     ),
+//   ),
+//   Hero(
+//     tag: "PARTY",
+//     child: ClipRRect(
+//       borderRadius: BorderRadius.circular(20.0),
+//       child: Image.asset(
+//         "assets/images/party1.png",
+//         fit: BoxFit.contain,
+//       ),
+//     ),
+//   ),
+//   Hero(
+//     tag: "USER",
+//     child: ClipRRect(
+//       borderRadius: BorderRadius.circular(20.0),
+//       child: Image.asset(
+//         "assets/images/user1.png",
+//         fit: BoxFit.contain,
+//       ),
+//     ),
+//   ),
+// ];
 
 class _MyHomePageState extends State<PageHome> {
   @override
@@ -239,6 +242,7 @@ class _MyHomePageState extends State<PageHome> {
           children: <Widget>[
             
             SizedBox(height: 20,),
+            //Clase en proceso para el pagina de inicio
             GridDashboard()
           ],
         ),

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import '../utils/forgot_password_page.dart';
 import 'registration.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+//Clase Login
 class Login extends StatefulWidget {
   final VoidCallback onClickedSignUp;
 
@@ -21,10 +21,11 @@ class Login extends StatefulWidget {
 }
 
 class _LoginDemoState extends State<Login> {
+  //Controladores de textfield
   final controllerEmail = TextEditingController();
   final controllerPassword = TextEditingController();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
+  final FirebaseAuth _auth = FirebaseAuth.instance;//Autenticacion de Firebase
+//Inicializar estado
   @override
   void dispose() {
     controllerEmail.dispose();
@@ -161,11 +162,11 @@ class _LoginDemoState extends State<Login> {
       ),
     );
   }
-
+//Funcion para inicio de sesion
   Future signIn() async {
     
     try {
-      await _auth.signInWithEmailAndPassword(
+      await _auth.signInWithEmailAndPassword(//espera a que los datos se manden para verificar si esta en Firebase Autentication
         email: controllerEmail.text.trim(),
         password: controllerPassword.text.trim(),
       );

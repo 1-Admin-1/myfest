@@ -1,9 +1,16 @@
-import 'package:MyFest/db/locations.dart';
-import 'package:flutter/cupertino.dart';
 
+///Librerias
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+///Routes
+import 'package:MyFest/db/locations.dart';
 
+
+///Clase MarkerInformation
+///Muestra la informacion de los pin en el mapa
+///Sigue en desarrollo (solo manda datos de cordenas aun no es personalizable)
 // ignore: must_be_immutable
 class MarkerInformation extends StatefulWidget {
   String title;

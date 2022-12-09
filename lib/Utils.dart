@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
 
+
+
+//Clase Utils
+/*
+ayuda a mandar un mensaje en error o mensaje informativo 
+que correspone a lo que manda firebase como respuesta u antes 
+que se mande a la base de datos 
+*/
+
+
 class Utils {
-  static final messengerKey = GlobalKey<ScaffoldMessengerState>();
+
+  static final messengerKey = GlobalKey<ScaffoldMessengerState>();//etiqueta llave utilizada para debugging unicamente
   static showSnackBar(String? text) {
     if (text == null) return;
 
@@ -15,6 +26,7 @@ class Utils {
       ..showSnackBar(snackBar);
   }
 
+// Estilo que manda al mapa de manera personalizada
   static String mapStyle = '''
 [
   {

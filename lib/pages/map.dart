@@ -7,7 +7,7 @@ import 'package:location/location.dart' as lc;
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
+//Clase PageMap
 class PageMap extends StatefulWidget {
   const PageMap({Key? key}) : super(key: key);
 
@@ -52,15 +52,17 @@ class _MapScreen extends State<PageMap> {
   //   });
   // }
 
+
+  //Crea estilo del mapa abase de Utils
   onMapCreated(GoogleMapController controller) {
     controller.setMapStyle(Utils.mapStyle);
     this.controller = controller;
   }
-
+  //Muestra en consola las coordenadas
   onTapMap(LatLng latLng) {
     print("onTapMap ${latLng}");
   }
-
+  //Muetsra un pop up de coordenadas
   onLongTapMap(LatLng latLng) {
     latLngOnLongPress = latLng;
     showPopUpMenu();
@@ -83,11 +85,11 @@ class _MapScreen extends State<PageMap> {
         elevation: 8.0);
     if (selected != null) getValue(selected);
   }
-
+  //obtener valor
   getValue(String value) {
     if (value == "Que hay") print("Ubicación $latLngOnLongPress");
   }
-
+  //crear un cuadro de informacion de un pin
   createMarker() {
     makers.add(Marker(
       markerId: const MarkerId("MarkerCurrent"),
@@ -106,7 +108,7 @@ class _MapScreen extends State<PageMap> {
       // zIndex: 1
     ));
   }
-
+  //circulo alrededor de la posicion(Aun no implementado por problemas de optimizacion)
   createCircle() {
     circles.add(Circle(
       circleId: const CircleId("circleMap"),
@@ -124,19 +126,19 @@ class _MapScreen extends State<PageMap> {
   onTapCircle() {
     print("onTapCircle");
   }
-
+//Inicializar estado
   @override
   void initState() {
     super.initState();
     getIcons();
     requestPerms();
   }
-
+  //Obtener localizacion
   getLocation() async {
     var currentLocation = await location.getLocation();
     updateLocation(currentLocation);
   }
-
+  //Actualiza localizacion
   updateLocation(currentLocation) {
     if (currentLocation != null) {
       print(
@@ -155,13 +157,13 @@ class _MapScreen extends State<PageMap> {
       
     }
   }
-
+  //Cambio en tiempo real de localizacion
   locationChanged() {
     location.onLocationChanged.listen((lc.LocationData cLoc) {
       updateLocation(cLoc);
     });
   }
-
+  //Manda habilitar permisos de localizacion hacia al usuario
   requestPerms() async {
     Map<Permission, PermissionStatus> statuses =
         await [Permission.location].request();
@@ -172,7 +174,7 @@ class _MapScreen extends State<PageMap> {
       enableGPS();
     }
   }
-
+  //Habilitar GPS
   enableGPS() async {
     location = lc.Location();
     bool serviceStatusResult = await location.requestService();
@@ -184,14 +186,14 @@ class _MapScreen extends State<PageMap> {
       locationChanged();
     }
   }
-
+//Actualizar estado
   updateStatus() {
     setState(() {
       myLocationButtonEnabled = true;
       myLocationEnabled = true;
     });
   }
-
+//Obtener icono para el pin en el mapa
   getIcons() async {
     var icon = await BitmapDescriptor.fromAssetImage(
         const ImageConfiguration(devicePixelRatio: 2.5),
@@ -206,6 +208,8 @@ class _MapScreen extends State<PageMap> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
+          //Obtiene la api de google 
+          //Mandando a llamar funciones para usabilidad especifica del mapa
           GoogleMap(
             compassEnabled: true,
             mapToolbarEnabled: false,
@@ -254,6 +258,7 @@ class _MapScreen extends State<PageMap> {
             //   )
             // }),
           ),
+          //Clase de visibilidad para el pin con datos especificos
           Visibility(
               visible: isShowInfo,
               child: MarkerInformation("Mi ubicacion", this.currentLocation,
@@ -267,6 +272,7 @@ class _MapScreen extends State<PageMap> {
         overlayOpacity: 0.5,
         elevation: 8.0,
         children: [
+          //Cambiar el diseno del mapa para preferencia del usuario
           SpeedDialChild(
               label: "NORMAL",
               child: Icon(Icons.room),
@@ -287,7 +293,7 @@ class _MapScreen extends State<PageMap> {
       ),
     );
   }
-
+  //Impresion en consola para verificar la nueva posicion
   onDragEnd(LatLng position) {
     print("new position $position");
   }

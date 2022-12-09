@@ -1,19 +1,19 @@
 import 'dart:io';
 
-import 'package:MyFest/models/dbModel.dart';
-import 'package:MyFest/pages/home.dart';
-import 'package:MyFest/pages/user.dart';
+
+//Librerias
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
-import 'package:MyFest/models/userProfile.dart';
+//Routes
+import 'package:MyFest/models/dbModel.dart';
+import 'package:MyFest/pages/home.dart';
+import 'package:MyFest/pages/user.dart';
 import 'package:MyFest/widgets/appbar_widget.dart';
 import 'package:MyFest/widgets/button_widget.dart';
 import 'package:MyFest/widgets/profile_widget.dart';
-import 'package:MyFest/widgets/textfield_widget.dart';
-
 class EditProfilePage extends StatefulWidget {
   Users user;
   EditProfilePage({Key? key, required this.user
@@ -24,14 +24,15 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-   final users = FirebaseAuth.instance.currentUser!;
+  //Variables de controladores de textfield
+   final users = FirebaseAuth.instance.currentUser!;//Variable de usuario logueado
   late final TextEditingController controllerNombre;
   late final TextEditingController controllerTelefono;
   late final TextEditingController controllerEdad;
   late final TextEditingController controllerDireccion;
   late final TextEditingController controllerEmail;
   
-  
+  //Inicializar controladores de texto
   @override
   void initState() {
     super.initState();
@@ -195,7 +196,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ),
                     onPressed: (){
                       // If the form is true (valid), or false.
-                        
+                        //Manda los datos a base de un modelo de usuario a firebase
                         final docEvents = FirebaseFirestore.instance
                             .collection('users')
                             .doc(widget.user.email);
@@ -227,7 +228,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     onPressed: 
                     () {
                       Navigator.push(
-                            context, MaterialPageRoute(builder: (_) => const HomePage()));
+                            context, MaterialPageRoute(builder: (_) => const HomePage()));//Retorna al HomePage
                     },
                   ),
                   
@@ -239,7 +240,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ),
       );
 
-
+//Validaciones de texto
       String? validateName(String? value) {
       String pattern = r'(^[a-zA-Z ]*$)';
       RegExp regExp = RegExp(pattern);

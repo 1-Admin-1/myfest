@@ -4,26 +4,26 @@ import 'package:MyFest/widgets/party_list.dart';
 import 'package:flutter/material.dart';
 import '../models/dbModel.dart';
 
-class ProductListingWidget extends StatefulWidget {
-  const ProductListingWidget({Key? key}) : super(key: key);
+///Class ProductListingWidget
+/// Inicializa la clase
+/// Estructura base para mandar a llamar los eventos en forma de lista
+class EventsListingWidget extends StatefulWidget {
+  const EventsListingWidget({Key? key}) : super(key: key);
 
   @override
-  _ProductListingWidgetState createState() => _ProductListingWidgetState();
+  _EventsListingWidgetState createState() => _EventsListingWidgetState();
 }
 
-class _ProductListingWidgetState extends State<ProductListingWidget> {
-  TextEditingController? textController;
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-  bool isSearchStarted = false;
+class _EventsListingWidgetState extends State<EventsListingWidget> {
+  TextEditingController? textController;//Controlador de text
+  final scaffoldKey = GlobalKey<ScaffoldState>();//llave para mantener el estado
+  bool isSearchStarted = false;//variable que sera utilizada para hacer una busqueda
   
-  List<Product> searchedProducts = [];
-  Stream<List<Events>> readEvents() => FirebaseFirestore.instance
-      .collection('events')
-      .snapshots()
-      .map((snapshot) =>
-          snapshot.docs.map((doc) => Events.fromJson(doc.data())).toList());
+  ///Variable de una busqueda de fiestas (Aun no implementada)
+  List<Product> searchedEvent = [];
 
-
+  ///Funcion para inicializar el estado de un objeto
+  ///Called when this object is inserted into the tree.
   @override
   void initState() {
     super.initState();
@@ -32,6 +32,7 @@ class _ProductListingWidgetState extends State<ProductListingWidget> {
 
   @override
   Widget build(BuildContext context) {
+    //Estructura del front
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Colors.white,
@@ -54,7 +55,7 @@ class _ProductListingWidgetState extends State<ProductListingWidget> {
             ),
           ),
           Expanded(
-            child: PartyList(),
+            child: PartyList(),//Clase PartyList
           ),
         ],
       ),

@@ -1,13 +1,16 @@
+//Routes
 import 'dart:async';
 import 'package:MyFest/models/dbModel.dart';
+import 'package:MyFest/pages/home.dart';
 import 'package:MyFest/pages/user.dart';
+//Librerias
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
-
+//Clase para editar fiestaa
 class PageEdit extends StatefulWidget {
   Events events;
 
@@ -19,13 +22,15 @@ class PageEdit extends StatefulWidget {
 }
 
 class _EditPageState extends State<PageEdit> {
-  final user = FirebaseAuth.instance.currentUser!;
+  //Variables de controladores
+  final user = FirebaseAuth.instance.currentUser!;//variable de usuario logueado
   late final TextEditingController controllerTitle;
   late final TextEditingController controllerDescripcion;
   late final TextEditingController controllerFecha;
   late final TextEditingController controllerDireccion;
   late final TextEditingController controllerDireccionNumero;
   
+  //Inicializar estado de contrladores
   @override
   void initState() {
     super.initState();
@@ -66,7 +71,7 @@ class _EditPageState extends State<PageEdit> {
       ),
     );
   }
-
+//Funcion de diseno 
   formItemsDesign(icon, item) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 7),
@@ -153,6 +158,7 @@ class _EditPageState extends State<PageEdit> {
                       const SnackBar(content: Text('Procesando Datos')),
                     );
                   }
+                  //Actualiza datos de un evento en especifico con los campos adecuados
                   final docEvents = FirebaseFirestore.instance
                       .collection('events')
                       .doc(widget.events.id);
@@ -195,7 +201,7 @@ class _EditPageState extends State<PageEdit> {
                   onPressed: () {
                     // If the form is true (valid), or false.
                     Navigator.push(
-                        context, MaterialPageRoute(builder: (_) => PageUser()));
+                        context, MaterialPageRoute(builder: (_) => const HomePage()));//Regresa a la pagina usuarios
                   },
                   child: const Text(
                     "Cancelar",

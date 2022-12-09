@@ -9,7 +9,8 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:email_validator/email_validator.dart';
 import 'package:MyFest/models/dbModel.dart';
-
+//Clase PageRegistration
+//Registra a usuarios
 // Create a Form widget.
 class PageRegistration extends StatefulWidget {
   final Function() onClickedSignIn;
@@ -24,6 +25,7 @@ class PageRegistration extends StatefulWidget {
 
 // Holds data related to the form.
 class MainFormState extends State<PageRegistration> {
+  //Variables de controladores de textfield y llave de estado para el debugging
   final keyForm = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
   final nameCtrl = TextEditingController();
@@ -35,6 +37,7 @@ class MainFormState extends State<PageRegistration> {
   final directionCtrl = TextEditingController();
 
   // Key that uniquely identifies the Form
+  //Variables para elegir una imagen(Aun no implementado)
   final _imagePicker = ImagePicker();
   File? _pickedImage;
 
@@ -51,24 +54,24 @@ class MainFormState extends State<PageRegistration> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                CircleAvatar(
-                  radius: 30,
-                  backgroundImage:
-                      _pickedImage != null ? FileImage(_pickedImage!) : null,
-                ),
-                TextButton.icon(
-                    onPressed: () async {
-                      final img = await _imagePicker.pickImage(
-                          source: ImageSource.camera);
-                      setState(() {
-                        _pickedImage = File(img!.path);
-                      });
-                    },
-                    style: TextButton.styleFrom(
-                      foregroundColor: Theme.of(context).primaryColor,
-                    ),
-                    icon: const Icon(Icons.image),
-                    label: const Text('Añadir foto')),
+                // CircleAvatar(
+                //   radius: 30,
+                //   backgroundImage:
+                //       _pickedImage != null ? FileImage(_pickedImage!) : null,
+                // ),
+                // TextButton.icon(
+                //     onPressed: () async {
+                //       final img = await _imagePicker.pickImage(
+                //           source: ImageSource.camera);
+                //       setState(() {
+                //         _pickedImage = File(img!.path);
+                //       });
+                //     },
+                //     style: TextButton.styleFrom(
+                //       foregroundColor: Theme.of(context).primaryColor,
+                //     ),
+                //     icon: const Icon(Icons.image),
+                //     label: const Text('Añadir foto')),
                 TextFormField(
                   controller: nameCtrl,
                   decoration: const InputDecoration(
@@ -185,6 +188,7 @@ class MainFormState extends State<PageRegistration> {
     );
   }
 
+//Funcion de validaciones Contraseña
   String? validatePassword(String? value) {
     if (kDebugMode) {
       print("valor $value passsword ${passwordCtrl.text}");
@@ -194,7 +198,7 @@ class MainFormState extends State<PageRegistration> {
     }
     return null;
   }
-
+//Funcion de validaciones Nombre
   String? validateName(String? value) {
     String pattern = r'(^[a-zA-Z ]*$)';
     RegExp regExp = RegExp(pattern);
@@ -205,7 +209,7 @@ class MainFormState extends State<PageRegistration> {
     }
     return null;
   }
-
+//Funcion de validaciones Numero Telefono
   String? validateMobile(String? value) {
     String patttern = r'(^[0-9]*$)';
     RegExp regExp = RegExp(patttern);
@@ -216,7 +220,7 @@ class MainFormState extends State<PageRegistration> {
     }
     return null;
   }
-
+//Funcion de validaciones Correo
   String? validateEmail(String? value) {
     String pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
@@ -229,7 +233,7 @@ class MainFormState extends State<PageRegistration> {
       return null;
     }
   }
-
+//Funcion de validaciones Edad
   String? validateAge(String? value) {
     int age = int.parse(value!);
     if (age < 18) {
@@ -240,15 +244,8 @@ class MainFormState extends State<PageRegistration> {
     return null;
   }
 
-  // save() {
-  //   if (keyForm.currentState!.validate()) {
-  //     print("Nombre ${nameCtrl.text}");
-  //     print("Telefono ${mobileCtrl.text}");
-  //     print("Correo ${emailCtrl.text}");
-  //     keyForm.currentState!.reset();
-  //   }
-  // }
 
+//Funcion asincrona que espera a que los campos sean correctos para mandar
   Future signUp() async {
 
     final isValid = formKey.currentState!.validate();
@@ -261,7 +258,8 @@ class MainFormState extends State<PageRegistration> {
               child: CircularProgressIndicator(),
             ));
     try {
-         
+         //En espera para mandar el registron en donde hace una autenticacion con 
+         //Correo y contrasena
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailCtrl.text.trim(), password: passwordCtrl.text.trim());
           if (formKey.currentState!.validate()) {
@@ -269,6 +267,7 @@ class MainFormState extends State<PageRegistration> {
                       const SnackBar(content: Text('Procesando datos...')),
                     );
                   }
+                  //Manda el modelo de datos 
                   final users = Users(
                     numeroTelefono: mobileCtrl.text, 
                     direccionResidencia: directionCtrl.text, 
@@ -276,6 +275,7 @@ class MainFormState extends State<PageRegistration> {
                     email: emailCtrl.text, 
                     nombre: nameCtrl.text,
                       );
+                      //Manda a llamar funcionpara crear usuario con sus registros personales
                   createUser(users: users);
                   Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
@@ -287,6 +287,7 @@ class MainFormState extends State<PageRegistration> {
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
 
+  //Crea un doc por usuario en la colleccion de usuarios
    Future createUser({required Users users}) async {
     final docUser = FirebaseFirestore.instance.collection('users').doc(users.email);
     users.id = docUser.id;

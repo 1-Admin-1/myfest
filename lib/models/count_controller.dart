@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+//Clase de controladores de cun contador
 class CountController extends StatefulWidget {
   const CountController({
     Key? key,
@@ -37,12 +37,13 @@ class _CountControllerState extends State<CountController> {
   bool get canDecrement => minimum == null || count - stepSize >= minimum!;
   bool get canIncrement => maximum == null || count + stepSize <= maximum!;
 
+//Desciende contador
   void _decrementCounter() {
     if (canDecrement) {
       setState(() => widget.updateCount(count - stepSize));
     }
   }
-
+//incrementa contador
   void _incrementCounter() {
     if (canIncrement) {
       setState(() => widget.updateCount(count + stepSize));

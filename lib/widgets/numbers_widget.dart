@@ -1,5 +1,9 @@
+///Librerias
 import 'package:flutter/material.dart';
 
+///Clase NumbersWidget
+///Esta se usara para sacar cantidades de fiestas creadas y sus calificaciones
+///AUN NO ESTA IMPLEMENTADO
 class NumbersWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Row(
@@ -7,7 +11,7 @@ class NumbersWidget extends StatelessWidget {
         children: <Widget>[
           buildButton(context, '4.8', 'Calificación'),
           buildDivider(),
-          buildButton(context, '35', 'Fiestas'), 
+          buildButton(context, '35', 'Fiestas'),
         ],
       );
   Widget buildDivider() => Container(

@@ -7,14 +7,15 @@ import 'package:flutter/material.dart';
 import 'home.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
-
+//Clase para crea fiesta
 class PageCreate extends StatefulWidget {
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
 
 class _RegisterPageState extends State<PageCreate> {
-  final user = FirebaseAuth.instance.currentUser!;
+  //Variable de controladores
+  final user = FirebaseAuth.instance.currentUser!;//Variable de usuario logueado
   final controllerTitle = TextEditingController();
   final controllerDescripcion = TextEditingController();
   final controllerFecha = TextEditingController();
@@ -26,6 +27,7 @@ class _RegisterPageState extends State<PageCreate> {
   TextEditingController addressNumberCtrl = TextEditingController();
   TextEditingController descriptionCtrl = TextEditingController();
 
+//Funcion para crea evento en base a un modelo de objetos
   Future createEvent({required Events events}) async {
     final docUser = FirebaseFirestore.instance.collection('events').doc();
     events.id = docUser.id;
@@ -140,6 +142,8 @@ class _RegisterPageState extends State<PageCreate> {
                       const SnackBar(content: Text('Procesando Datos')),
                     );
                   }
+                  //manda toda la informacion de los controladores a un modelo
+                  //para asi mandarlo a una funcion de crear eventos
                   final events = Events(
                       title: controllerTitle.text,
                       descripcion: controllerDescripcion.text,
@@ -147,7 +151,7 @@ class _RegisterPageState extends State<PageCreate> {
                       direccion: controllerDireccion.text,
                       numeroDireccion: int.parse(controllerDirecionNumero.text),
                       userEmail: user.email!);
-                  createEvent(events: events);
+                  createEvent(events: events);//funcion para crear eventos
                   Navigator.pop(context);
                 },
                 icon: const Icon(
@@ -179,7 +183,7 @@ class _RegisterPageState extends State<PageCreate> {
                   onPressed: () {
                     // If the form is true (valid), or false.
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => const HomePage()));
+                        MaterialPageRoute(builder: (_) => const HomePage()));//regresa al home page
                   },
                   child: const Text(
                     "Cancelar",
@@ -193,6 +197,7 @@ class _RegisterPageState extends State<PageCreate> {
     );
   }
 
+//Validaciones 
   String? validateNameParty(String? value) {
     String pattern = r'(^[a-zA-Z ]*$)';
     RegExp regExp = RegExp(pattern);

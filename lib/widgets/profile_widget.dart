@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+
+///Clase ProfileWidget
+///Widget para dar estilo a la parte que iria en perfil y asi mostrar la imagen
 class ProfileWidget extends StatelessWidget {
   final String imagePath;
   final bool isEdit;
@@ -32,6 +35,9 @@ class ProfileWidget extends StatelessWidget {
     );
   }
 
+
+  ///Widget ProfileWidget
+  ///Construir Imagen
   Widget buildImage() {
     final image = NetworkImage(imagePath);
 
@@ -48,7 +54,9 @@ class ProfileWidget extends StatelessWidget {
       ),
     );
   }
-
+  
+  ///Widget buildEditIcon
+  ///Construir boton de editar
   Widget buildEditIcon(Color color) => buildCircle(
         color: Colors.white,
         all: 3,
@@ -62,7 +70,8 @@ class ProfileWidget extends StatelessWidget {
           ),
         ),
       );
-
+///Widget buildCircle
+///Construir la forma de un circulo
   Widget buildCircle({
     required Widget child,
     required double all,

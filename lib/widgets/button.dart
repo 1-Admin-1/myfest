@@ -1,6 +1,9 @@
+//Librerias
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
+//Clase ButtonOptions
+// Diseno de botones
 class ButtonOptions {
   const ButtonOptions({
     this.textStyle,
@@ -100,7 +103,8 @@ class _MyButtonWidgetState extends State<MyButtonWidget> {
     ButtonStyle style = ButtonStyle(
       shape: MaterialStateProperty.all<OutlinedBorder>(
         RoundedRectangleBorder(
-          borderRadius: widget.options.borderRadius ?? BorderRadius.circular(8.0),
+          borderRadius:
+              widget.options.borderRadius ?? BorderRadius.circular(8.0),
           side: widget.options.borderSide ?? BorderSide.none,
         ),
       ),
@@ -126,9 +130,10 @@ class _MyButtonWidgetState extends State<MyButtonWidget> {
         }
         return null;
       }),
-      padding: MaterialStateProperty.all(
-          widget.options.padding ?? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0)),
-      elevation: MaterialStateProperty.all<double>(widget.options.elevation ?? 2.0),
+      padding: MaterialStateProperty.all(widget.options.padding ??
+          const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0)),
+      elevation:
+          MaterialStateProperty.all<double>(widget.options.elevation ?? 2.0),
     );
 
     if (widget.icon != null || widget.iconData != null) {
@@ -142,7 +147,8 @@ class _MyButtonWidgetState extends State<MyButtonWidget> {
                 Icon(
                   widget.iconData,
                   size: widget.options.iconSize,
-                  color: widget.options.iconColor ?? widget.options.textStyle!.color,
+                  color: widget.options.iconColor ??
+                      widget.options.textStyle!.color,
                 ),
           ),
           label: textWidget,

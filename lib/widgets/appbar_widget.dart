@@ -1,8 +1,10 @@
+
+//Librerias
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+//Funcion para diseno del boton de cerrar sesion
 AppBar buildAppBar(BuildContext context) {
   final isDarkMode = Theme.of(context).brightness == Brightness.dark;
   final icon = CupertinoIcons.moon_stars;
@@ -16,7 +18,7 @@ AppBar buildAppBar(BuildContext context) {
         builder: (context) => ElevatedButton(
           style: const ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.transparent)) ,
           child: const Text("Cerrar Sesión"),
-          onPressed: () => FirebaseAuth.instance.signOut(), 
+          onPressed: () => FirebaseAuth.instance.signOut(), //Al presionar cierra sesion para la autenticacion de firebase
         ),
       ),
     ],

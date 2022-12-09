@@ -1,29 +1,30 @@
+//Librerias
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
+//Routes
 import 'package:MyFest/Utils.dart';
 import 'package:MyFest/utils/verify_email.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'utils/auth_page.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 
 
-
-// Future main('utils/auth_page.dart'WidgetsFlutterBinding.ensureInitialized();
-//   await Firebase.initializeApp();
-
-//   runApp(MyApp());
-// }
-
+// Main 
+//Declarada en futuro por espera que inicie firabase en la app
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
  
-  runApp(MyApp());
+  runApp(MyApp());//Inicia a correr el programa con la clase MyApp
 }
-
+//Llave de para la navegacion de la app y asi no se pierda el estado durante 
+// su uso por las interfaces
 final navigatorKey = GlobalKey<NavigatorState>();
 
+//Clase MyApp
+//Widget Principal
+//Esta compuesto con estructura base de titulo y un home con una clase el cual redirigirá
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -33,11 +34,18 @@ class MyApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       title: 'MyFest',
       home:
-      MainPage(),
+      MainPage(),//Clase MainPage
     );
   }
 }
 
+//Clase MainPage
+/*Estructura Base
+Permite sabe el estado en que se encuentra el usuario, permitiendo
+sabe si el usuario sigue logeado o no aunque haya cerrado la aplicacion.
+Si el usuario no ha verificado su cuenta entonces pasa a un estado de espera
+y no loguea
+*/
 class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -51,35 +59,11 @@ class MainPage extends StatelessWidget {
                 child: Text('HUBO UN ERROR!'),
               );
             } else if (snapshot.hasData) {
-              return VerifyEmailPage();
+              return VerifyEmailPage(); //Clase que verifica el email
             } else {
-              return AuthPage();
+              return AuthPage();//Clase de autenticacion de usuario
             }
           },
         ),
       );
 }
-
-// class MyApp extends StatefulWidget {
-//   const MyApp({Key? key}) : super(key: key);
-
-//   static const primaryColor = Colors.orange;
-
-//   @override
-//   State<MyApp> createState() => _MyAppState();
-// }
-
-// class _MyAppState extends State<MyApp> {
-//   @override
-//   Widget build(BuildContext context) {
-    
-//     return MaterialApp(
-//       scaffoldMessengerKey: Utils.messengerKey,
-//       debugShowCheckedModeBanner: false,
-//       title: 'Flutter Demo',
-//       theme: ThemeData(primarySwatch: MyApp.primaryColor),
-//       initialRoute: '/',
-//       onGenerateRoute: RouteGenerator.generateRoute,
-//     );
-//   }
-// }

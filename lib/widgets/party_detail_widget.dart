@@ -1,17 +1,19 @@
-
-import 'package:MyFest/app_theme.dart';
-import 'package:MyFest/widgets/button.dart';
+///Librerias
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+///Routes
 import '../bloc/cart_bloc.dart';
 import '../bloc/event/cart_event.dart';
 import '../models/dbModel.dart';
 import 'count_controller.dart';
-
+import 'package:MyFest/app_theme.dart';
+import 'package:MyFest/widgets/button.dart';
+///Clase PartyDetailWidget
+///Muestra detalle de cada evento
 class PartyDetailWidget extends StatefulWidget {
+  ///necesario mandar a llamar una variable del modelo Events
   const PartyDetailWidget({Key? key, required this.events}) : super(key: key);
 
   final Events events;
@@ -23,10 +25,15 @@ class PartyDetailWidget extends StatefulWidget {
 
 class _PartyDetailWidgetState extends State<PartyDetailWidget>
     with TickerProviderStateMixin {
+      ///Variable que ayuda a identificar quien esta logeado en tiempo real
   final user = FirebaseAuth.instance.currentUser!;
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  int? countControllerValue;
+  int? countControllerValue; ///contador de valor
 
+  ///Funcion para mandar llamadar una lista de datos de manera asincrona desde firebase
+  ///leer los usuarios que hay en la base de datos
+  ///solo hace la lecutra una vez de coleccion y documento especifico
+  ///Con esto hacemos lectura de quien asistio
   Future<Users?> readUsersOne() async {
     final docUser =
         FirebaseFirestore.instance.collection('users').doc(user.email);
@@ -41,12 +48,15 @@ class _PartyDetailWidgetState extends State<PartyDetailWidget>
   void initState() {
     super.initState();
   }
-  
+  ///Crear lista de asistencia e ingresar datos al evento especifico
   Future createList({required Attendance attendance}) async {
-    final docUser = FirebaseFirestore.instance.collection('events').doc(widget.events.id).collection('listAttendance').doc();
+    final docUser = FirebaseFirestore.instance.collection('events')//coleccion
+    .doc(widget.events.id)//obtener el id del evento
+    .collection('listAttendance')//crear lista de asistencia
+    .doc();//crear doc con id automatico para la estructura de Attendance 
     attendance.id = docUser.id;
     final json = attendance.toJson();
-    await docUser.set(json);
+    await docUser.set(json);//en espera para recibir en el json
   }
 
   @override
@@ -54,16 +64,17 @@ class _PartyDetailWidgetState extends State<PartyDetailWidget>
     String fechaaux = widget.events.fecha.toString();
     String fecha;
     
-      fecha = fechaaux.replaceAll("00:00:00.000", "");
+      fecha = fechaaux.replaceAll("00:00:00.000", "");//remplaza los datos innecesarios para mostrar lo importante
+      //Retorna en futuro hasta que reciba usuarios
       return FutureBuilder<Users?>(
-        future: readUsersOne(),
+        future: readUsersOne(),//funcion para leer los usuarios
         builder: (context, snapshot) {
-          if (snapshot.hasError) {
+          if (snapshot.hasError) {//si hay error
             return Text('Hubo un problema! ${snapshot.error}');
-          } else if (snapshot.hasData) {
+          } else if (snapshot.hasData) {//si tiene datos
             final users = snapshot.data!;
             return Scaffold(
-              key: scaffoldKey,
+              key: scaffoldKey,//llave del estado
               appBar: AppBar(
                 backgroundColor: Color(0xff453658),
                 automaticallyImplyLeading: false,
@@ -78,7 +89,7 @@ class _PartyDetailWidgetState extends State<PartyDetailWidget>
                   ),
                 ),
                 title: Text(
-                  ' ${widget.events.title}',
+                  ' ${widget.events.title}',//imprimir titulo
                   style: AppTheme.of(context).subtitle2.override(
                         fontFamily: 'Lexend Deca',
                         color: Color(0xfff70506),
@@ -108,7 +119,7 @@ class _PartyDetailWidgetState extends State<PartyDetailWidget>
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(12),
                                 child: Image.asset(
-                                  'assets/images/logoNombre.png',
+                                  'assets/images/logoNombre.png',//imagen de deafult(personalizada en la siguiente version)
                                   width: double.infinity,
                                   height: 300,
                                   fit: BoxFit.cover,
@@ -126,7 +137,7 @@ class _PartyDetailWidgetState extends State<PartyDetailWidget>
                                   fontWeight: FontWeight.w600,
                                   fontSize: 14)),
                                 Text(
-                                  widget.events.direccion,
+                                  widget.events.direccion,//imprimir direccion
                                   style: AppTheme.of(context).title1,
                                 ),
                                 const Text('  Número: ',style: TextStyle(
@@ -170,7 +181,7 @@ class _PartyDetailWidgetState extends State<PartyDetailWidget>
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
                             child: Text(
-                              widget.events.descripcion,
+                              widget.events.descripcion,//imprimir descripcion
                               style: AppTheme.of(context).bodyText5,
                             ),
                           ),
@@ -178,6 +189,8 @@ class _PartyDetailWidgetState extends State<PartyDetailWidget>
                       ),
                     ),
                   ),
+                  /// Bottom app bar 
+                  /// Esta parte es la del contador y crear asistencia en por persona
                   Material(
                     color: Colors.transparent,
                     elevation: 3,
@@ -217,6 +230,7 @@ class _PartyDetailWidgetState extends State<PartyDetailWidget>
                                   width: 2,
                                 ),
                               ),
+                              //COntador de aumento y decenso del valor 
                               child: CountController(
                                 decrementIconBuilder: (enabled) => Icon(
                                   Icons.remove_rounded,
@@ -238,13 +252,15 @@ class _PartyDetailWidgetState extends State<PartyDetailWidget>
                                   style: AppTheme.of(context).subtitle1,
                                 ),
                                 count: countControllerValue ??= 1,
+                                //actualizar contador
                                 updateCount: (count) =>
                                     setState(() => countControllerValue = count),
                                 stepSize: 1,
                                 minimum: 1,
                               ),
                             ),
-                            
+                            //Boton para asistir que andara los valores del usuario junto con el valor que la 
+                            // cantidad de asistentes
                             MyButtonWidget(
                               text: 'ASISTIR',
                               options: ButtonOptions(
@@ -262,6 +278,7 @@ class _PartyDetailWidgetState extends State<PartyDetailWidget>
                                   ),
                                   borderRadius: BorderRadius.all(Radius.circular(36))),
                                   onPressed: () {
+                                    //Cuando presione manda datos a la funcion crear lista
                                     final attendance = Attendance(
                                     nombre: users.nombre,
                                     userEmail: user.email!, 

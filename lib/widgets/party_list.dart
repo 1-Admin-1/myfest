@@ -1,44 +1,57 @@
+///Librerias
+
 import 'package:animations/animations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+///Routes
 import '../app_theme.dart';
 import '../bloc/cart_bloc.dart';
 import '../bloc/state/cart_state.dart';
 import '../models/dbModel.dart';
-
 import 'party_detail_widget.dart';
 
+///Clase en donde mandamos a imprimir todas las listas con forma de GRID y List
+//
 class PartyList extends StatefulWidget {
   PartyList({Key? key}) : super(key: key);
 
+
+  ///Creates the mutable state for this widget at a given location in the tree.
   @override
-  _MyProductList createState() => _MyProductList();
+  _MyPartyList createState() => _MyPartyList();
 }
 
-class _MyProductList extends State<PartyList> {
+class _MyPartyList extends State<PartyList> {
   final user = FirebaseAuth.instance.currentUser!;
   
+  ///Funcion para mandar llamadar una lista de datos de manera asincrona desde firebase
+  ///leer los eventos que hay en la base de datos
   Stream<List<Events>> readEvents() => FirebaseFirestore.instance
-      .collection('events')
+      .collection('events')//collecion eventos
       .snapshots()
       .map((snapshot) =>
-          snapshot.docs.map((doc) => Events.fromJson(doc.data())).toList());
+          snapshot.docs.map((doc) => Events.fromJson(doc.data())).toList());///regresar en forma de lista dinamica
 
+  ///Funcion para mandar llamadar una lista de datos de manera asincrona desde firebase
+  ///leer los eventos que hay en la base de datos
+  ///solo hace la lecutra una vez de coleccion y documento especifico
   Future<Events?> readEventsOne() async {
     final docUser = FirebaseFirestore.instance
-        .collection('events')
-        .doc('jIANP4VCeH2kGWhMbtmK');
-    final snapshot = await docUser.get();
-    if (snapshot.exists) {
+        .collection('events')//coleccion
+        .doc('jIANP4VCeH2kGWhMbtmK');//documento
+    final snapshot = await docUser.get();//en espera a obtener datos
+    if (snapshot.exists) {//si existe datos mandar al modelo de Events como json
       return Events.fromJson(snapshot.data()!);
     }
   }
 
+  ///Funcion para crear una lista con diseño dinamico
+  ///Necesario mandar una clase Events (modelo de la base de datos), y cantidad de datos
   OpenContainer makeListTile(Events events, itemNo) => OpenContainer<bool>(
         openBuilder: (BuildContext _, VoidCallback openContainer) {
+          ///Si presiona retorna una clase PartyDetailWidget para ver detalles de eventos
           return PartyDetailWidget(
             events: events,
             
@@ -47,8 +60,9 @@ class _MyProductList extends State<PartyList> {
         closedShape: const RoundedRectangleBorder(),
         closedElevation: 0.0,
         closedBuilder: (BuildContext _, VoidCallback openContainer) {
+          ///Retorna en una estructura base de container para la vista del front
           return Container(
-            //width: MediaQuery.of(context).size.width * 0.45,
+           //Decoracion de caja en lista
             decoration: BoxDecoration(
               color: Color(0xff453658),
               boxShadow: const [
@@ -77,7 +91,7 @@ class _MyProductList extends State<PartyList> {
                             topRight: Radius.circular(8),
                           ),
                           child: Image.asset(
-                            'assets/images/logoNombre.png',
+                            'assets/images/logoNombre.png', //Mandar a llamar imagen default (siguiente version sera personalizable)
                             width: 100,
                             height: 100,
                             fit: BoxFit.cover,
@@ -95,7 +109,7 @@ class _MyProductList extends State<PartyList> {
                           padding:
                               const EdgeInsetsDirectional.fromSTEB(8, 4, 0, 0),
                           child: Text(
-                            events.title,
+                            events.title,//mandar a llamar titulo de la clase Events
                             style: AppTheme.of(context).bodyText4,
                           ),
                         ),
@@ -125,23 +139,24 @@ class _MyProductList extends State<PartyList> {
         },
       );
 
+
+  //Funcion para crear estructura base de la lista y poder mandar llamar la lista de snapshot 
+  //en forma de Clase Events(Modelo de base de datos) y necesario incluir el numero de datos
   Padding makeCard(Events events, int itemNo) => Padding(
         padding: const EdgeInsets.all(8.0),
-        child: makeListTile(events, itemNo),
+        child: makeListTile(events, itemNo),// manda a llamar funcion
 
-        // Container(
-        //   decoration: const BoxDecoration(color: Colors.white),
-        //   child: makeListTile(events),
-        // ),
       );
-
+  ///Funcion para crear el cuerpo de toda la lista y asi dar formato
+  ///incluir cantidad de datos, Lista de events y variable para poder 
+  ///renderizar cada grid que se crea
   makeBody(int snapshot, List events, BoxConstraints constraints) => Container(
         child: GridView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           itemCount: snapshot,
           itemBuilder: (BuildContext context, int index) {
-            return makeCard(events[index], index);
+            return makeCard(events[index], index);//madar a llamar la funcion con events en forma del modelo y su cantidad de datos
           },
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: constraints.maxWidth > 700 ? 4 : 2,
@@ -149,7 +164,7 @@ class _MyProductList extends State<PartyList> {
           ),
         ),
       );
-
+  /// Estructura principal para mandar a llamar los datos de firabse en forma de snapshot en tiempo real 
   @override
   Widget build(BuildContext context) {
     
@@ -157,27 +172,28 @@ class _MyProductList extends State<PartyList> {
       bool isGridView = cartState.isGridView;
       if (isGridView) {
         return LayoutBuilder(builder: (context, constraints) {
-          
+          ///Crear estructura en forma de lista de los snapshot que es de manera asincrona
           return StreamBuilder<List<Events>>(
-            stream: readEvents(),
+            stream: readEvents(),// mandar a llamar la funcion para extraer datos
             builder: (context, snapshot) {
-              if (snapshot.hasError) {
+              if (snapshot.hasError) {//si hubo error al extraer los datos 
                 return Text('Hubo un problema! ${snapshot.error}');
-              } else if (snapshot.hasData) {
+              } else if (snapshot.hasData) {///si hay datos
                 final events = snapshot.data!;
                 return LayoutBuilder(builder: (context, constraints) {
                   return Container(
+                    //manda llamar funcion para crear el body del pagina
                     child: makeBody(
                         snapshot.data!.length, events.toList(), constraints),
                   );
                 });
-              } else {
+              } else {/// circulo de carga
                 return const Center(child: CircularProgressIndicator());
               }
             },
           );
         });
-      } else {
+      } else {// circulo de carga
         return const Center(child: CircularProgressIndicator());
       }
     });

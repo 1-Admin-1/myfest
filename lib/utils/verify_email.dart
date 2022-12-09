@@ -1,10 +1,11 @@
 import 'dart:async';
-
+//routes
 import 'package:MyFest/Utils.dart';
 import 'package:MyFest/pages/home.dart';
+//Libreria
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+//Clase para verificar el correo
 class VerifyEmailPage extends StatefulWidget {
   @override
   _VerifyEmailPage createState() => _VerifyEmailPage();
@@ -14,11 +15,12 @@ class _VerifyEmailPage extends State<VerifyEmailPage> {
   bool isEmailVerified = false;
   bool canResendEmail = false;
   Timer? timer;
-
+//Inicializa un estado en donde un boton no se habilita despues de 3 segundos para evitar
+// que el usuario pueda presionarlo
   @override
   void initState() {
     super.initState();
-    //user needs to be created before
+    //El usuario tiene que crear su cuenta antes de verificar
     isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
     if (!isEmailVerified) {
       sendVerificationEmail();
@@ -36,7 +38,7 @@ class _VerifyEmailPage extends State<VerifyEmailPage> {
   }
 
   Future checkEmailVerified() async {
-    // call after email verification
+    //Manda a llamar verificacion de email
     await FirebaseAuth.instance.currentUser!.reload();
     setState(() {
       isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
@@ -74,6 +76,7 @@ class _VerifyEmailPage extends State<VerifyEmailPage> {
               const Text('Link de verificación de correo a sido enviado',
                   style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
               const SizedBox(height: 24),
+              //Boton para reenviar el codigo
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xfff70506),
@@ -84,7 +87,7 @@ class _VerifyEmailPage extends State<VerifyEmailPage> {
                   'Reenviar correo',
                   style: TextStyle(fontSize: 24),
                 ),
-                onPressed: canResendEmail ? sendVerificationEmail : null,
+                onPressed: canResendEmail ? sendVerificationEmail : null, //reenvia el link
               ),
               const SizedBox(height: 8),
               TextButton(
@@ -94,7 +97,7 @@ class _VerifyEmailPage extends State<VerifyEmailPage> {
                 child :Text('Cancelar',
                   style: TextStyle(fontSize: 24,color:Color(0xfff70506) ),
                 ),
-                onPressed: () => FirebaseAuth.instance.signOut(),
+                onPressed: () => FirebaseAuth.instance.signOut(),//Cancela y se sale al login de nuevo
                 ),
             ]),
           ),

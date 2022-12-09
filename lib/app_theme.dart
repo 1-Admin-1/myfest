@@ -3,11 +3,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+//Clase AppTheme
+//utilizada para tipografia y paleta de
+//colores en parte de la app
 abstract class AppTheme {
   static AppTheme of(BuildContext context) {
     return LightModeTheme();
   }
 
+  // Inicializacion de variables
   late Color primaryColor;
   late Color secondaryColor;
   late Color tertiaryColor;
@@ -52,6 +56,7 @@ abstract class AppTheme {
   Typography get typography => ThemeTypography(this);
 }
 
+//Colores para modo claro de la app
 class LightModeTheme extends AppTheme {
   late Color primaryColor = const Color(0xFF764ABC);
   late Color secondaryColor = const Color(0xFF39D2C0);
@@ -72,6 +77,7 @@ class LightModeTheme extends AppTheme {
   late Color textColor = Color(0xFF1E2429);
 }
 
+//Tipografia
 abstract class Typography {
   String get title1Family;
   TextStyle get title1;
@@ -97,6 +103,7 @@ abstract class Typography {
   TextStyle get bodyText5;
 }
 
+// Clase de tema, tipografia, color y tamaño
 class ThemeTypography extends Typography {
   ThemeTypography(this.theme);
 
@@ -179,9 +186,9 @@ class ThemeTypography extends Typography {
         fontWeight: FontWeight.w600,
         fontSize: 14,
       );
-      
 }
 
+//Extensiones para mandar a llamar los estilos de texto
 extension TextStyleHelper on TextStyle {
   TextStyle override({
     String? fontFamily,

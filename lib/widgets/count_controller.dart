@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-
+///Clase CountController
+///Hace el control del contador de asistentes del eventos
+///
 class CountController extends StatefulWidget {
+  //Datos necesario para mandar a llamar la clase
   const CountController({
     Key? key,
     required this.decrementIconBuilder,
@@ -36,13 +39,13 @@ class _CountControllerState extends State<CountController> {
 
   bool get canDecrement => minimum == null || count - stepSize >= minimum!;
   bool get canIncrement => maximum == null || count + stepSize <= maximum!;
-
+//Funcion de disminuir
   void _decrementCounter() {
     if (canDecrement) {
       setState(() => widget.updateCount(count - stepSize));
     }
   }
-
+//Funcion de incrementar 
   void _incrementCounter() {
     if (canIncrement) {
       setState(() => widget.updateCount(count + stepSize));
