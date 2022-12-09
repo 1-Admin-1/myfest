@@ -70,7 +70,18 @@ A few resources to get you started if this is your first Flutter project:
   flutter_launcher_icons: ^0.10.0
   build_runner: ^1.0.0
   json_serializable: any
-#
+## PERMISOS
+La app tiene permisos para uso en cualquier dispositivo por parte de FIRBASE
+#Reglas
+rules_version = '2';
+    service cloud.firestore {
+      match /databases/{database}/documents {
+        match /{document=**} {
+          allow read, write: if request.time < timestamp.date(2024, 1, 1);
+        }
+      }
+    }
+    
 
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
