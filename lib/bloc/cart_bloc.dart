@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../models/dataEvents.dart';
+import '../models/dbModel.dart';
 import 'event/cart_event.dart';
 import 'state/cart_state.dart';
 

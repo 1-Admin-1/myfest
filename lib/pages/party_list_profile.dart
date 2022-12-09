@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import '../bloc/cart_bloc.dart';
-import '../models/dataEvents.dart';
+import '../models/dbModel.dart';
 
 class PagePartyProfile extends StatefulWidget {
   const PagePartyProfile({Key? key}) : super(key: key);

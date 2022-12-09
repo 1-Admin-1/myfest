@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:MyFest/Utils.dart';
-import 'package:MyFest/models/dataEvents.dart';
+import 'package:MyFest/models/dbModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +26,6 @@ class _RegisterPageState extends State<PageCreate> {
   TextEditingController addressNumberCtrl = TextEditingController();
   TextEditingController descriptionCtrl = TextEditingController();
 
-
   Future createEvent({required Events events}) async {
     final docUser = FirebaseFirestore.instance.collection('events').doc();
     events.id = docUser.id;
@@ -38,7 +37,6 @@ class _RegisterPageState extends State<PageCreate> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-
         appBar: AppBar(
           backgroundColor: Colors.black,
           title: const Text('Crear Fiesta'),
@@ -132,9 +130,9 @@ class _RegisterPageState extends State<PageCreate> {
               width: 300,
               child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xfff70506),
-                      minimumSize: const Size.fromHeight(50),
-                    ),
+                  backgroundColor: const Color(0xfff70506),
+                  minimumSize: const Size.fromHeight(50),
+                ),
                 onPressed: () {
                   // If the form is true (valid), or false.
                   if (keyForm.currentState!.validate()) {
@@ -153,49 +151,43 @@ class _RegisterPageState extends State<PageCreate> {
                   Navigator.pop(context);
                 },
                 icon: const Icon(
-                    Icons.add_box,
-                    color: Colors.black,
-                    size: 32,
-                  ),
-                label: const Text("PUBLICAR",
-                style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500),),
-
-                // style: TextButton.styleFrom(
-                //     padding: EdgeInsets.only(top: 16, bottom: 16),
-                //     textStyle: const TextStyle(
-                //         color: Colors.white,
-                //         fontSize: 18,
-                //         fontWeight: FontWeight.w500)),
+                  Icons.add_box,
+                  color: Colors.black,
+                  size: 32,
+                ),
+                label: const Text(
+                  "PUBLICAR",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500),
+                ),
               ),
-            )
-            ),
-            const SizedBox(height: 10,),
+            )),
+        const SizedBox(
+          height: 10,
+        ),
         GestureDetector(
             child: Container(
                 height: 50,
                 width: 300,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xfff70506),
-                      minimumSize: const Size.fromHeight(50),
-                    ),
+                    backgroundColor: const Color(0xfff70506),
+                    minimumSize: const Size.fromHeight(50),
+                  ),
                   onPressed: () {
                     // If the form is true (valid), or false.
-                    Navigator.push(
-                        context, MaterialPageRoute(builder: (_) => const HomePage()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => const HomePage()));
                   },
-
-                  child: const Text("Cancelar",
-                  style: TextStyle(
+                  child: const Text(
+                    "Cancelar",
+                    style: TextStyle(
                         color: Colors.black,
                         fontSize: 18,
                         fontWeight: FontWeight.w500),
-                   ),
-
-
+                  ),
                 )))
       ],
     );
@@ -245,45 +237,4 @@ class _RegisterPageState extends State<PageCreate> {
       return null;
     }
   }
-
-  // save() {
-  //   if (keyForm.currentState!.validate()) {
-  //     print("Nombre ${namePartyCtrl.text}");
-  //     print("Dirección ${addressCtrl.text}");
-  //     print("Numero ${addressNumberCtrl.text}");
-  //     print("Descripción ${descriptionCtrl.text}");
-  //     Operation.insert(Note(
-  //         title: namePartyCtrl.text,
-  //         description: descriptionCtrl.text,
-  //         address: addressCtrl.text,
-  //         addressNumber: addressNumberCtrl.text));
-  //     keyForm.currentState!.reset();
-  //   }
-  // }
 }
-
-// class Events {
-//   late String id;
-//   late final String title;
-//   late final String descripcion;
-//   late final DateTime fecha;
-//   late final String direccion;
-//   late final int numeroDireccion;
-//   Events({
-//     this.id = '',
-//     required this.title,
-//     required this.descripcion,
-//     required this.fecha,
-//     required this.direccion,
-//     required this.numeroDireccion,
-//   });
-//   Map<String, dynamic> toJson() => {
-//         'id': id,
-//         'title': title,
-//         'descripcion': descripcion,
-//         'fecha': fecha,
-//         'direccion': direccion,
-//         'numeroDireccion': numeroDireccion,
-//       };
-
-// }

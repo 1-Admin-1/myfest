@@ -1,4 +1,4 @@
-import '../../models/dataEvents.dart';
+import '../../models/dbModel.dart';
 
 abstract class CartState {
   final List<Product> cartItem;

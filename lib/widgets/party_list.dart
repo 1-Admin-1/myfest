@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../app_theme.dart';
 import '../bloc/cart_bloc.dart';
 import '../bloc/state/cart_state.dart';
-import '../models/dataEvents.dart';
+import '../models/dbModel.dart';
 
 import 'party_detail_widget.dart';
 

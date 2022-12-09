@@ -12,7 +12,7 @@ import 'package:MyFest/widgets/button_widget.dart';
 import 'package:MyFest/widgets/numbers_widget.dart';
 import 'package:MyFest/widgets/profile_widget.dart';
 
-import 'package:MyFest/models/dataEvents.dart';
+import 'package:MyFest/models/dbModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';

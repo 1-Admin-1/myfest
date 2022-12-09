@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:MyFest/app_theme.dart';
 import 'package:MyFest/widgets/party_list.dart';
 import 'package:flutter/material.dart';
-import '../models/dataEvents.dart';
+import '../models/dbModel.dart';
 
 class ProductListingWidget extends StatefulWidget {
   const ProductListingWidget({Key? key}) : super(key: key);
@@ -23,16 +23,6 @@ class _ProductListingWidgetState extends State<ProductListingWidget> {
       .map((snapshot) =>
           snapshot.docs.map((doc) => Events.fromJson(doc.data())).toList());
 
-  Future<Events?> readEventsOne() async {
-    final docUser = FirebaseFirestore.instance
-        .collection('events')
-        .doc('EFOZtmwUM2U6xtjTCmOF');
-    final snapshot = await docUser.get();
-    if (snapshot.exists) {
-      return Events.fromJson(snapshot.data()!);
-    }
-  }
-  
 
   @override
   void initState() {
@@ -61,81 +51,10 @@ class _ProductListingWidgetState extends State<ProductListingWidget> {
                   width: 2,
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: const [
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(4, 0, 4, 0),
-                      child: Icon(
-                        Icons.search_rounded,
-                        color: Color(0xFF95A1AC),
-                        size: 24,
-                      ),
-                    ),
-                    // Expanded(
-                    //   child: Padding(
-                    //     padding: EdgeInsetsDirectional.fromSTEB(4, 0, 0, 0),
-                    //     child: TextFormField(
-                    //       controller: textController,
-                    //       obscureText: false,
-                    //       onChanged: (_) => EasyDebounce.debounce(
-                    //         'tFMemberController',
-                    //         Duration(milliseconds: 0),
-                    //         () {
-                    //           isSearchStarted =
-                    //               textController!.text.isNotEmpty && textController!.text.trim().length > 0;
-                    //           print('isSearchStarted $isSearchStarted');
-                    //           if (isSearchStarted) {
-                    //             print('${textController!.text.trim()}');
-                    //             searchedProducts = readEvents
-                    //                 .where((item) =>
-                    //                     item.name.toLowerCase().contains(textController!.text.trim().toLowerCase()))
-                    //                 .toList();
-                    //           }
-                    //           setState(() {});
-                    //         },
-                    //       ),
-                    //       decoration: InputDecoration(
-                    //         labelText: 'Buscar Evento...',
-                    //         enabledBorder: UnderlineInputBorder(
-                    //           borderSide: BorderSide(
-                    //             color: Color(0x00000000),
-                    //             width: 1,
-                    //           ),
-                    //           borderRadius: const BorderRadius.only(
-                    //             topLeft: Radius.circular(4.0),
-                    //             topRight: Radius.circular(4.0),
-                    //           ),
-                    //         ),
-                    //         focusedBorder: UnderlineInputBorder(
-                    //           borderSide: BorderSide(
-                    //             color: Color(0x00000000),
-                    //             width: 1,
-                    //           ),
-                    //           borderRadius: const BorderRadius.only(
-                    //             topLeft: Radius.circular(4.0),
-                    //             topRight: Radius.circular(4.0),
-                    //           ),
-                    //         ),
-                    //       ),
-                    //       style: AppTheme.of(context).bodyText1.override(
-                    //             fontFamily: 'Poppins',
-                    //             color: Color(0xFF95A1AC),
-                    //           ),
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
-                ),
-              ),
             ),
           ),
           Expanded(
-            child: PartyList(
-             
-            ),
+            child: PartyList(),
           ),
         ],
       ),

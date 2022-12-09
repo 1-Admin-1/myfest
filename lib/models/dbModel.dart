@@ -67,6 +67,28 @@ class Events {
       );
 }
 
+class Attendance {
+  late String id;
+  String userEmail;
+  int cantidadPersonas;
+  String nombre;
+
+  Attendance(
+      {this.id = '', required this.cantidadPersonas, required this.userEmail, required this.nombre});
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'countPersons': cantidadPersonas,
+        'user_email': userEmail,
+        'name': nombre
+      };
+  static Attendance fromJson(Map<String, dynamic> json) => Attendance(
+        id: json['id'],
+        cantidadPersonas: json['countPersons'],
+        userEmail: json['user_email'],
+        nombre: json['name'],
+      );
+}
+
 class Users {
   late String id;
   String nombre;
@@ -78,33 +100,30 @@ class Users {
 
   Users(
       {this.id = '',
-      this.ubicacionImg='',
+      this.ubicacionImg = '',
       required this.nombre,
       required this.direccionResidencia,
       required this.email,
       required this.numeroTelefono,
       required this.edad});
   Map<String, dynamic> toJson() => {
-      'id': id,
-      'nombre': nombre,
-      'ubicacionImg': ubicacionImg,
-      'direccionResidencia':direccionResidencia,
-      'email':email,
-      'numeroTelefono':numeroTelefono,
-      'edad': edad,
+        'id': id,
+        'nombre': nombre,
+        'ubicacionImg': ubicacionImg,
+        'direccionResidencia': direccionResidencia,
+        'email': email,
+        'numeroTelefono': numeroTelefono,
+        'edad': edad,
       };
   static Users fromJson(Map<String, dynamic> json) => Users(
-        id: json['id'],
-        nombre: json['nombre'],
-        direccionResidencia: json['direccionResidencia'],
-        email: json['email'],
-        edad: json['edad'],
-        numeroTelefono: json['numeroTelefono'],
-        ubicacionImg: json['ubicacionImg']
-      );
+      id: json['id'],
+      nombre: json['nombre'],
+      direccionResidencia: json['direccionResidencia'],
+      email: json['email'],
+      edad: json['edad'],
+      numeroTelefono: json['numeroTelefono'],
+      ubicacionImg: json['ubicacionImg']);
 }
-
-
 
 class Appointment {
   final String name;
@@ -114,7 +133,11 @@ class Appointment {
   final String? id;
 
   Appointment(
-      {required this.name, required this.time, required this.service, required this.status, this.id});
+      {required this.name,
+      required this.time,
+      required this.service,
+      required this.status,
+      this.id});
 
   factory Appointment.fromJson(Map<String, dynamic> json) {
     return Appointment(
@@ -124,7 +147,7 @@ class Appointment {
         status: json['status'],
         id: json['id']);
   }
-  
+
   toJson() {
     return {
       'name': name,

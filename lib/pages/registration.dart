@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:email_validator/email_validator.dart';
-import 'package:MyFest/models/dataEvents.dart';
+import 'package:MyFest/models/dbModel.dart';
 
 // Create a Form widget.
 class PageRegistration extends StatefulWidget {

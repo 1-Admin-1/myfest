@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../models/dataEvents.dart';
+import '../../models/dbModel.dart';
 
 abstract class CartEvent extends Equatable {
   const CartEvent();

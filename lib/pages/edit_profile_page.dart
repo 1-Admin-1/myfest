@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:MyFest/models/dataEvents.dart';
+import 'package:MyFest/models/dbModel.dart';
 import 'package:MyFest/pages/home.dart';
 import 'package:MyFest/pages/user.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';

@@ -1,12 +1,12 @@
+
 import 'package:MyFest/Utils.dart';
 import 'package:MyFest/utils/verify_email.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'utils/auth_page.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
+
 
 
 // Future main('utils/auth_page.dart'WidgetsFlutterBinding.ensureInitialized();

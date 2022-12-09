@@ -6,14 +6,14 @@ class GridDashboard extends StatelessWidget {
   Items item1 = new Items(
       title: "Calendario",
       subtitle: "Marzo 2022",
-      event: "50 promociones",
+      event: "50 Eventos",
       img: "assets/images/calendar.png");
 
   Items item2 = new Items(
-    title: "Categorias",
-    subtitle: "Comida, Limpieza, etc",
-    event: "4 Categorias",
-    img: "assets/images/opciones.png",
+    title: "Terrazas",
+    subtitle: "",
+    event: "Lista de Terrazas",
+    img: "assets/images/setting.png",
   );
   Items item3 = new Items(
     title: "Puntos de Venta",
@@ -22,10 +22,10 @@ class GridDashboard extends StatelessWidget {
     img: "assets/images/map.png",
   );
   Items item4 = new Items(
-    title: "Carrito",
+    title: "Promociones",
     subtitle: "Rose favirited your Post",
     event: "",
-    img: "assets/images/bienes.png",
+    img: "assets/images/setting.png",
   );
   Items item5 = new Items(
     title: "Perfil",
