@@ -1,45 +1,55 @@
 import 'dart:async';
-import 'package:MyFest/Utils.dart';
 import 'package:MyFest/models/dataEvents.dart';
-import 'package:MyFest/models/note.dart';
+import 'package:MyFest/pages/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'home.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
 
-class PageCreate extends StatefulWidget {
+class PageEdit extends StatefulWidget {
+  Events events;
+
+  PageEdit({Key? key, required this.events
+      })
+      : super(key: key);
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  _EditPageState createState() => _EditPageState();
 }
 
-class _RegisterPageState extends State<PageCreate> {
+class _EditPageState extends State<PageEdit> {
   final user = FirebaseAuth.instance.currentUser!;
-  final controllerTitle = TextEditingController();
-  final controllerDescripcion = TextEditingController();
-  final controllerFecha = TextEditingController();
-  final controllerDireccion = TextEditingController();
-  final controllerDirecionNumero = TextEditingController();
+  late final TextEditingController controllerTitle;
+  late final TextEditingController controllerDescripcion;
+  late final TextEditingController controllerFecha;
+  late final TextEditingController controllerDireccion;
+  late final TextEditingController controllerDireccionNumero;
+  
+  @override
+  void initState() {
+    super.initState();
+
+    controllerTitle = TextEditingController(text: widget.events.title);
+    controllerDescripcion =
+        TextEditingController(text: widget.events.descripcion);
+    controllerDireccion = TextEditingController(text: widget.events.direccion);
+    controllerDireccionNumero =
+        TextEditingController(text: widget.events.numeroDireccion.toString());
+    controllerFecha =
+        TextEditingController(text: widget.events.fecha.toString());
+  }
+
   GlobalKey<FormState> keyForm = GlobalKey();
   TextEditingController namePartyCtrl = TextEditingController();
   TextEditingController addressCtrl = TextEditingController();
   TextEditingController addressNumberCtrl = TextEditingController();
   TextEditingController descriptionCtrl = TextEditingController();
 
-
-  Future createUser({required Events events}) async {
-    final docUser = FirebaseFirestore.instance.collection('events').doc();
-    events.id = docUser.id;
-    final json = events.toJson();
-    await docUser.set(json);
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-
         appBar: AppBar(
           backgroundColor: Colors.black,
           title: const Text('Crear Fiesta'),
@@ -89,7 +99,7 @@ class _RegisterPageState extends State<PageCreate> {
         formItemsDesign(
             Icons.location_pin,
             TextFormField(
-              controller: controllerDirecionNumero,
+              controller: controllerDireccionNumero,
               decoration: const InputDecoration(
                 labelText: 'Numero de Dirección',
               ),
@@ -126,16 +136,16 @@ class _RegisterPageState extends State<PageCreate> {
             onTap: () {
               // save();
               Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => const HomePage()));
+                  context, MaterialPageRoute(builder: (_) => PageUser()));
             },
             child: Container(
               height: 50,
               width: 300,
               child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xfff70506),
-                      minimumSize: const Size.fromHeight(50),
-                    ),
+                  backgroundColor: const Color(0xfff70506),
+                  minimumSize: const Size.fromHeight(50),
+                ),
                 onPressed: () {
                   // If the form is true (valid), or false.
                   if (keyForm.currentState!.validate()) {
@@ -143,60 +153,57 @@ class _RegisterPageState extends State<PageCreate> {
                       const SnackBar(content: Text('Procesando Datos')),
                     );
                   }
-                  final events = Events(
-                      title: controllerTitle.text,
-                      descripcion: controllerDescripcion.text,
-                      fecha: DateTime.parse(controllerFecha.text),
-                      direccion: controllerDireccion.text,
-                      numeroDireccion: int.parse(controllerDirecionNumero.text),
-                      userEmail: user.email!);
-                  createUser(events: events);
+                  final docEvents = FirebaseFirestore.instance
+                      .collection('events')
+                      .doc(widget.events.id);
+                  docEvents.update({
+                    'title': controllerTitle.text,
+                    'descripcion': controllerDescripcion.text,
+                    'fecha': DateTime.parse(controllerFecha.text),
+                    'direccion': controllerDireccion.text,
+                    'numeroDireccion':
+                        int.parse(controllerDireccionNumero.text),
+                  });
                   Navigator.pop(context);
                 },
                 icon: const Icon(
-                    Icons.add_box,
-                    color: Colors.black,
-                    size: 32,
-                  ),
-                label: const Text("PUBLICAR",
-                style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500),),
-
-                // style: TextButton.styleFrom(
-                //     padding: EdgeInsets.only(top: 16, bottom: 16),
-                //     textStyle: const TextStyle(
-                //         color: Colors.white,
-                //         fontSize: 18,
-                //         fontWeight: FontWeight.w500)),
+                  Icons.add_box,
+                  color: Colors.black,
+                  size: 32,
+                ),
+                label: const Text(
+                  "MODIFICAR",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500),
+                ),
               ),
-            )
-            ),
-            const SizedBox(height: 10,),
+            )),
+        const SizedBox(
+          height: 10,
+        ),
         GestureDetector(
             child: Container(
                 height: 50,
                 width: 300,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xfff70506),
-                      minimumSize: const Size.fromHeight(50),
-                    ),
+                    backgroundColor: const Color(0xfff70506),
+                    minimumSize: const Size.fromHeight(50),
+                  ),
                   onPressed: () {
                     // If the form is true (valid), or false.
                     Navigator.push(
-                        context, MaterialPageRoute(builder: (_) => const HomePage()));
+                        context, MaterialPageRoute(builder: (_) => PageUser()));
                   },
-
-                  child: const Text("Cancelar",
-                  style: TextStyle(
+                  child: const Text(
+                    "Cancelar",
+                    style: TextStyle(
                         color: Colors.black,
                         fontSize: 18,
                         fontWeight: FontWeight.w500),
-                   ),
-
-
+                  ),
                 )))
       ],
     );
@@ -246,45 +253,4 @@ class _RegisterPageState extends State<PageCreate> {
       return null;
     }
   }
-
-  // save() {
-  //   if (keyForm.currentState!.validate()) {
-  //     print("Nombre ${namePartyCtrl.text}");
-  //     print("Dirección ${addressCtrl.text}");
-  //     print("Numero ${addressNumberCtrl.text}");
-  //     print("Descripción ${descriptionCtrl.text}");
-  //     Operation.insert(Note(
-  //         title: namePartyCtrl.text,
-  //         description: descriptionCtrl.text,
-  //         address: addressCtrl.text,
-  //         addressNumber: addressNumberCtrl.text));
-  //     keyForm.currentState!.reset();
-  //   }
-  // }
 }
-
-// class Events {
-//   late String id;
-//   late final String title;
-//   late final String descripcion;
-//   late final DateTime fecha;
-//   late final String direccion;
-//   late final int numeroDireccion;
-//   Events({
-//     this.id = '',
-//     required this.title,
-//     required this.descripcion,
-//     required this.fecha,
-//     required this.direccion,
-//     required this.numeroDireccion,
-//   });
-//   Map<String, dynamic> toJson() => {
-//         'id': id,
-//         'title': title,
-//         'descripcion': descripcion,
-//         'fecha': fecha,
-//         'direccion': direccion,
-//         'numeroDireccion': numeroDireccion,
-//       };
-
-// }

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:MyFest/app_theme.dart';
 import 'package:MyFest/widgets/party_list.dart';
 import 'package:flutter/material.dart';
-import 'models/dataEvents.dart';
+import '../models/dataEvents.dart';
 
 class ProductListingWidget extends StatefulWidget {
   const ProductListingWidget({Key? key}) : super(key: key);

@@ -1,5 +1,5 @@
-import 'package:MyFest/login.dart';
-import 'package:MyFest/registration.dart';
+import 'package:MyFest/pages/login.dart';
+import 'package:MyFest/pages/registration.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';

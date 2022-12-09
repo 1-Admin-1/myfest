@@ -9,7 +9,7 @@ import '../bloc/cart_bloc.dart';
 import '../bloc/state/cart_state.dart';
 import '../models/dataEvents.dart';
 
-import '../party_detail_widget.dart';
+import 'party_detail_widget.dart';
 
 class PartyList extends StatefulWidget {
   PartyList({Key? key}) : super(key: key);
@@ -161,12 +161,6 @@ class _MyProductList extends State<PartyList> {
           return StreamBuilder<List<Events>>(
             stream: readEvents(),
             builder: (context, snapshot) {
-              // if (snapshot.data.isEmpty) {
-              //   return const SizedBox(
-              //     height: 300.0,
-              //     child: Center(child: Text("Por el momento no hay eventos")),
-              //   );
-              // }
               if (snapshot.hasError) {
                 return Text('Hubo un problema! ${snapshot.error}');
               } else if (snapshot.hasData) {

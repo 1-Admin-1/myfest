@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:MyFest/Utils.dart';
 import 'package:MyFest/models/dataEvents.dart';
-import 'package:MyFest/models/note.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,52 +9,23 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
 
 class PageCreate extends StatefulWidget {
-  final String title;
-  final String descripcion;
-  final String direccion;
-  final int numeroDireccion;
-  final DateTime fecha;
-  final ValueChanged<String> onChanged;
-
-  const PageCreate({
-    Key? key,
-    required this.title,
-    required this.descripcion,
-    required this.direccion,
-    required this.numeroDireccion,
-    required this.fecha,
-    required this.onChanged,
-  }) : super(key: key);
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
 
 class _RegisterPageState extends State<PageCreate> {
   final user = FirebaseAuth.instance.currentUser!;
-  late final TextEditingController controllerTitle;
+  final controllerTitle = TextEditingController();
   final controllerDescripcion = TextEditingController();
   final controllerFecha = TextEditingController();
   final controllerDireccion = TextEditingController();
   final controllerDirecionNumero = TextEditingController();
-  @override
-  void initState() {
-    super.initState();
-
-    controllerTitle = TextEditingController(text: widget.title);
-  }
-
-  @override
-  void dispose() {
-    controllerTitle.dispose();
-
-    super.dispose();
-  }
-
   GlobalKey<FormState> keyForm = GlobalKey();
   TextEditingController namePartyCtrl = TextEditingController();
   TextEditingController addressCtrl = TextEditingController();
   TextEditingController addressNumberCtrl = TextEditingController();
   TextEditingController descriptionCtrl = TextEditingController();
+
 
   Future createEvent({required Events events}) async {
     final docUser = FirebaseFirestore.instance.collection('events').doc();
@@ -64,23 +34,11 @@ class _RegisterPageState extends State<PageCreate> {
     await docUser.set(json);
   }
 
-  Future editEvent({required Events events}) async {
-    FirebaseFirestore.instance.collection('events').doc(events.id).update({
-      'title': events.title,
-      'descripcion': events.descripcion,
-      'direccion': events.direccion,
-      'numeroDireccion': events.numeroDireccion,
-      'fecha': events.fecha,
-    });
-    setState(() {
-      Navigator.pop(context);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+
         appBar: AppBar(
           backgroundColor: Colors.black,
           title: const Text('Crear Fiesta'),
@@ -174,9 +132,9 @@ class _RegisterPageState extends State<PageCreate> {
               width: 300,
               child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xfff70506),
-                  minimumSize: const Size.fromHeight(50),
-                ),
+                      backgroundColor: const Color(0xfff70506),
+                      minimumSize: const Size.fromHeight(50),
+                    ),
                 onPressed: () {
                   // If the form is true (valid), or false.
                   if (keyForm.currentState!.validate()) {
@@ -195,17 +153,15 @@ class _RegisterPageState extends State<PageCreate> {
                   Navigator.pop(context);
                 },
                 icon: const Icon(
-                  Icons.add_box,
-                  color: Colors.black,
-                  size: 32,
-                ),
-                label: const Text(
-                  "PUBLICAR",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500),
-                ),
+                    Icons.add_box,
+                    color: Colors.black,
+                    size: 32,
+                  ),
+                label: const Text("PUBLICAR",
+                style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500),),
 
                 // style: TextButton.styleFrom(
                 //     padding: EdgeInsets.only(top: 16, bottom: 16),
@@ -214,31 +170,32 @@ class _RegisterPageState extends State<PageCreate> {
                 //         fontSize: 18,
                 //         fontWeight: FontWeight.w500)),
               ),
-            )),
-        const SizedBox(
-          height: 10,
-        ),
+            )
+            ),
+            const SizedBox(height: 10,),
         GestureDetector(
             child: Container(
                 height: 50,
                 width: 300,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xfff70506),
-                    minimumSize: const Size.fromHeight(50),
-                  ),
+                      backgroundColor: const Color(0xfff70506),
+                      minimumSize: const Size.fromHeight(50),
+                    ),
                   onPressed: () {
                     // If the form is true (valid), or false.
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => const HomePage()));
+                    Navigator.push(
+                        context, MaterialPageRoute(builder: (_) => const HomePage()));
                   },
-                  child: const Text(
-                    "Cancelar",
-                    style: TextStyle(
+
+                  child: const Text("Cancelar",
+                  style: TextStyle(
                         color: Colors.black,
                         fontSize: 18,
                         fontWeight: FontWeight.w500),
-                  ),
+                   ),
+
+
                 )))
       ],
     );

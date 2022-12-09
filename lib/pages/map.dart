@@ -1,10 +1,11 @@
 import 'package:MyFest/Utils.dart';
+import 'package:MyFest/widgets/marker_information.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:location/location.dart' as lc;
 
 import 'package:permission_handler/permission_handler.dart';
-import 'marker_information.dart';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PageMap extends StatefulWidget {

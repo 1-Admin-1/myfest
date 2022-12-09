@@ -4,7 +4,7 @@ import 'package:MyFest/Main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'forgot_password_page.dart';
+import '../utils/forgot_password_page.dart';
 import 'registration.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -163,12 +163,7 @@ class _LoginDemoState extends State<Login> {
   }
 
   Future signIn() async {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => const Center(
-              child: CircularProgressIndicator(),
-            ));
+    
     try {
       await _auth.signInWithEmailAndPassword(
         email: controllerEmail.text.trim(),

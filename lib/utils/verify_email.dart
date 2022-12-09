@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:MyFest/Utils.dart';
-import 'package:MyFest/home.dart';
+import 'package:MyFest/pages/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

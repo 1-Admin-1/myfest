@@ -1,13 +1,13 @@
-import 'package:MyFest/party_detail_widget.dart';
-import 'package:MyFest/party_listing_widget.dart';
+import 'package:MyFest/pages/edit_events.dart';
+import 'package:MyFest/widgets/party_detail_widget.dart';
+import 'package:MyFest/widgets/party_listing_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'bloc/cart_bloc.dart';
-import 'models/dataEvents.dart';
-import 'detail_party.dart';
+import '../bloc/cart_bloc.dart';
+import '../models/dataEvents.dart';
 
 class PagePartyProfile extends StatefulWidget {
   const PagePartyProfile({Key? key}) : super(key: key);
@@ -38,6 +38,42 @@ class _MyHomePageState extends State<PagePartyProfile> {
   void deleteEvent(idDoc) {
     //Elimina en la coleccion el doc donde esta el evento especifico
     FirebaseFirestore.instance.collection('events').doc(idDoc).delete();
+  }
+
+  void pageEdit(Events events) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => PageEdit(
+            events: events,
+          ),
+        ));
+  }
+
+  showAlertDialog(BuildContext context, {required Events events}) {
+    // set up the buttons
+    Widget cancelButton = ElevatedButton(
+      child: Text("Cancel"),
+      onPressed: () =>Navigator.of(context, rootNavigator: false).pop(),
+    );
+    Widget continueButton = TextButton(
+      child: Text("Eliminar"),
+      onPressed: () => {deleteEvent(events.id)},
+    ); // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Eliminar Evento"),
+      content: Text("¿Realmente quieres eliminar el evento?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    ); // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   Widget build(BuildContext context) {
@@ -85,12 +121,6 @@ class _MyHomePageState extends State<PagePartyProfile> {
           ),
           trailing: const Icon(Icons.keyboard_arrow_right,
               color: Color(0xfff70506), size: 30.0),
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => DetailPage(events: events)));
-          },
         );
 
     Card makeCard(Events events) => Card(
@@ -103,7 +133,7 @@ class _MyHomePageState extends State<PagePartyProfile> {
                   motion: const ScrollMotion(),
                   children: [
                     SlidableAction(
-                      onPressed: (context) => {},
+                      onPressed: (context) => pageEdit(events),
                       // update(appointment),
                       backgroundColor: Colors.blue,
                       foregroundColor: Colors.white,
@@ -116,7 +146,8 @@ class _MyHomePageState extends State<PagePartyProfile> {
                   motion: const ScrollMotion(),
                   children: [
                     SlidableAction(
-                      onPressed: (context) => deleteEvent(events.id),
+                      onPressed: (context) =>
+                          showAlertDialog(context, events: events),
                       // deleteAppointment(appointment),
                       backgroundColor: const Color(0xFFFE4A49),
                       foregroundColor: Colors.white,

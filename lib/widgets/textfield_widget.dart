@@ -44,7 +44,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           const SizedBox(height: 8),
-          TextField(
+          TextFormField(
             controller: controller,
             decoration: InputDecoration(
               border: OutlineInputBorder(

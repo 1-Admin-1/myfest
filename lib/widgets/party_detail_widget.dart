@@ -4,10 +4,10 @@ import 'package:MyFest/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'bloc/cart_bloc.dart';
-import 'bloc/event/cart_event.dart';
-import 'models/dataEvents.dart';
-import 'widgets/count_controller.dart';
+import '../bloc/cart_bloc.dart';
+import '../bloc/event/cart_event.dart';
+import '../models/dataEvents.dart';
+import 'count_controller.dart';
 
 class PartyDetailWidget extends StatefulWidget {
   const PartyDetailWidget({Key? key, required this.events}) : super(key: key);

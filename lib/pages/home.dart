@@ -1,11 +1,11 @@
 // ignore_for_file: use_key_in_widget_constructors
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'Map.dart';
+import '../Map.dart';
 import 'party.dart';
 import 'user.dart';
-import 'create.dart';
-import 'home_widget.dart';
+import 'create_events.dart';
+import '../widgets/home_widget.dart';
 
 
 //backgroundImage: AssetImage('assets/images/pin1.png'),
