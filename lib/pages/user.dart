@@ -16,8 +16,8 @@ import 'package:MyFest/widgets/button_widget.dart';
 import 'package:MyFest/widgets/numbers_widget.dart';
 import 'package:MyFest/widgets/profile_widget.dart';
 import 'package:MyFest/models/dbModel.dart';
+import 'package:http/http.dart';
 import '../bloc/cart_bloc.dart';
-
 
 //Clase User
 //Muestra informacion personal y eventos creados
@@ -39,6 +39,15 @@ class _ProfilePageState extends State<PageUser> {
     }
   }
 
+  Stream<List<Events>> readEvents() => FirebaseFirestore.instance
+      .collection('events')
+      .where('user_email', isEqualTo: user.email)
+      .snapshots()
+      .map((snapshot) =>
+          snapshot.docs.map((doc) => Events.fromJson(doc.data())).toList());
+  
+      
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Users?>(
@@ -54,11 +63,11 @@ class _ProfilePageState extends State<PageUser> {
               physics: BouncingScrollPhysics(),
               children: [
                 //Clase que da el diseno de la imagen(Aun no esta implementado)
-                ProfileWidget(
-                  imagePath: 'userProfile.imagePath',
-                  onClicked: () {},
-                ),
-                const SizedBox(height: 24),
+                // ProfileWidget(
+                //   imagePath: 'userProfile.imagePath',
+                //   onClicked: () {},
+                // ),
+                const SizedBox(height: 80),
                 //funcion para mostrar los datos del usuario
                 buildName(users.nombre, users.edad, users.email,
                     users.numeroTelefono),
