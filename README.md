@@ -2,6 +2,9 @@
 
 ESTA APP FUNCIONA SOLO PARA ANDROID 10+
 
+### Pagina principal
+lib/pages/main.dart
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
