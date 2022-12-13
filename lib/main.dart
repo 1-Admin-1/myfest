@@ -50,8 +50,9 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         body: StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
+          stream: FirebaseAuth.instance.authStateChanges(), //Cambia un estado de sign in o sign out con ayuda de firebase
           builder: (context, snapshot) {
+            //En espera a recibir el snapshot de datos de Firebase authentication
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
