@@ -1,6 +1,9 @@
-# MyFest 1.0
+# MyFest Versión Alfa
 
 ESTA APP FUNCIONA SOLO PARA ANDROID 10+
+
+### Pagina principal
+lib/pages/main.dart
 
 ## Getting Started
 
