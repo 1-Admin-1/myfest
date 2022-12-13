@@ -1,4 +1,4 @@
-# MyFest 1.0
+# MyFest Versión 1.0
 
 ESTA APP FUNCIONA SOLO PARA ANDROID 10+
 
