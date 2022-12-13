@@ -1,6 +1,7 @@
 # MyFest Versión Alfa
 
 ESTA APP FUNCIONA SOLO PARA ANDROID 10+
+App para creación de eventos
 
 ### Pagina principal
 lib/pages/main.dart
