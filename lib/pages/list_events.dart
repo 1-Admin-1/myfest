@@ -27,11 +27,11 @@ class _ListEventPage extends State<ListEventPage>{
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Attendance>>(
-        stream: readList(),
+        stream: readList(),//llama la funcion para iniciar con el snapshot al builder
         builder: (context, snapshot) {
-          if (!snapshot.hasData) return CircularProgressIndicator();
+          if (!snapshot.hasData) return CircularProgressIndicator();//circulo de carga
           final list = snapshot.data!;
-          return ListView.builder(
+          return ListView.builder(//Regresa un builder para mostrar en un listview
               itemCount: list.length,
               itemBuilder: (BuildContext context, int index) {
                 return Card(

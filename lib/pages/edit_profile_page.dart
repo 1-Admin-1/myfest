@@ -241,6 +241,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
       );
 
 //Validaciones de texto
+
+//Validacion de nombre
       String? validateName(String? value) {
       String pattern = r'(^[a-zA-Z ]*$)';
       RegExp regExp = RegExp(pattern);
@@ -251,7 +253,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       }
       return null;
     }
-
+//Validacion de Numero de Telefono
     String? validateMobile(String? value) {
       String patttern = r'(^[0-9]*$)';
       RegExp regExp = RegExp(patttern);
@@ -262,7 +264,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       }
       return null;
     }
-
+//Validacion de correo electronico
     String? validateEmail(String? value) {
       String pattern =
           r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
@@ -275,7 +277,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         return null;
       }
     }
-
+//Validacion de edad
     String? validateAge(String? value) {
       int age = int.parse(value!);
       if (age < 18) {

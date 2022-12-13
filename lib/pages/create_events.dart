@@ -198,6 +198,8 @@ class _RegisterPageState extends State<PageCreate> {
   }
 
 //Validaciones 
+
+//Validacion de nombre
   String? validateNameParty(String? value) {
     String pattern = r'(^[a-zA-Z ]*$)';
     RegExp regExp = RegExp(pattern);
@@ -208,7 +210,7 @@ class _RegisterPageState extends State<PageCreate> {
     }
     return null;
   }
-
+//Validacion de direccion
   String? validateAddress(String? value) {
     String patttern = r'^[a-zA-Z]*$';
     RegExp regExp = RegExp(patttern);
@@ -219,7 +221,7 @@ class _RegisterPageState extends State<PageCreate> {
     }
     return null;
   }
-
+//Validacion de numero de direccion
   String? validateAddressNumber(String? value) {
     String patttern = r'^[a-zA-Z0-9]*$';
     RegExp regExp = RegExp(patttern);
@@ -230,7 +232,7 @@ class _RegisterPageState extends State<PageCreate> {
     }
     return null;
   }
-
+//Validacion de descripcion
   String? validateDescription(String? value) {
     String pattern = r'^[a-zA-Z0-9]*$';
     RegExp regExp = RegExp(pattern);

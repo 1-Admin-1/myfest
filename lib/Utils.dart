@@ -13,10 +13,10 @@ que se mande a la base de datos
 class Utils {
 
   static final messengerKey = GlobalKey<ScaffoldMessengerState>();//etiqueta llave utilizada para debugging unicamente
-  static showSnackBar(String? text) {
+  static showSnackBar(String? text) {//Si no recibe informacion, entonces manda un null
     if (text == null) return;
 
-    final snackBar = SnackBar(
+    final snackBar = SnackBar(// Si manda informacion entonces manda un texto del problema
       content: Text(text),
       backgroundColor: Colors.greenAccent,
     );

@@ -1,5 +1,7 @@
+//Librería
 import 'package:flutter/material.dart';
 
+//Clase para crear los campos de text field 
 class TextFieldWidget extends StatefulWidget {
   final int maxLines;
   final String label;

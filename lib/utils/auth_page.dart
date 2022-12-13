@@ -1,8 +1,10 @@
+//Librerías
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+//Routes
 import 'package:MyFest/pages/login.dart';
 import 'package:MyFest/pages/registration.dart';
-import 'package:flutter/cupertino.dart';
 
-import 'package:flutter/material.dart';
 //Clase de autenticacion
 
 class AuthPage extends StatefulWidget {

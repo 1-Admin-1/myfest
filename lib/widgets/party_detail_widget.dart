@@ -283,7 +283,7 @@ class _PartyDetailWidgetState extends State<PartyDetailWidget>
                                     nombre: users.nombre,
                                     userEmail: user.email!, 
                                     cantidadPersonas: countControllerValue!);
-                                createList(attendance: attendance);
+                                createList(attendance: attendance);//Manda el modelo a la funcion con los datos para guardar
                                 Navigator.pop(context);
                               },
                             ),
@@ -296,7 +296,7 @@ class _PartyDetailWidgetState extends State<PartyDetailWidget>
                 ],
               ),
             );
-          } else {
+          } else {//Circulo de carga
             return const Center(child: CircularProgressIndicator());
           }
         },

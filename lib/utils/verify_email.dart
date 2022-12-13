@@ -22,9 +22,10 @@ class _VerifyEmailPage extends State<VerifyEmailPage> {
     super.initState();
     //El usuario tiene que crear su cuenta antes de verificar
     isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+    //Si el correo no esta verificado manda un mensaje de verficacion
     if (!isEmailVerified) {
       sendVerificationEmail();
-      timer = Timer.periodic(
+      timer = Timer.periodic(//establece un contador de 3 segundos en verificar si ya esta verficado el contador
         Duration(seconds: 3),
         (_) => checkEmailVerified(),
       );
@@ -36,14 +37,14 @@ class _VerifyEmailPage extends State<VerifyEmailPage> {
     timer?.cancel();
     super.dispose();
   }
-
+  //Funcion para verificar el correo en espera a recibir un estado de verficación
   Future checkEmailVerified() async {
-    //Manda a llamar verificacion de email
+    //Manda a llamar verificacion de email y recarga 
     await FirebaseAuth.instance.currentUser!.reload();
     setState(() {
       isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
     });
-    if (isEmailVerified) timer?.cancel();
+    if (isEmailVerified) timer?.cancel();//Si esta verifcado se cancel el contador 
   }
   
   /*

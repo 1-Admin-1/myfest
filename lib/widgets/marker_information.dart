@@ -1,6 +1,5 @@
 
 ///Librerias
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -54,12 +53,12 @@ class MarkerInformationState extends State<MarkerInformation> {
               style: TextStyle(color: Colors.white),
             ),
             Text(
-              "Latitud: ${widget.latLng.latitude}",
+              "Latitud: ${widget.latLng.latitude}",//Obtener latitud e imprimir
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 10, color: Colors.redAccent),
             ),
             Text(
-              "Longitud: ${widget.latLng.longitude}",
+              "Longitud: ${widget.latLng.longitude}",//Obtener longitud e imprimir
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 10, color: Colors.redAccent),
             ),

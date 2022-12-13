@@ -280,8 +280,8 @@ class MainFormState extends State<PageRegistration> {
                   Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       
-        print(e);
-        Utils.showSnackBar(e.message);
+        print(e);//Imprime en consola el error
+        Utils.showSnackBar(e.message);//Manda mensaje de error en pantalla
     }
     // Navigator.of(context) not working!
     navigatorKey.currentState!.popUntil((route) => route.isFirst);

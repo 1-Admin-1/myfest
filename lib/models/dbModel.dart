@@ -17,6 +17,9 @@ class Product {
       this.quantity = 0});
 }
 
+
+//Clase que da modelo a la base de datos y con lo que mandamos los datos
+//Esta clase es para datos principales de cada evento 
 class Events {
   late String id;
   String title;
@@ -54,6 +57,7 @@ class Events {
       );
 }
 
+//Clase que da modelo a la base de datos de lista de asistencia
 class Attendance {
   late String id;
   String userEmail;
@@ -76,6 +80,7 @@ class Attendance {
       );
 }
 
+//Clase que da modelo a la base de datos para la informacion de los usuarios registrados
 class Users {
   late String id;
   String nombre;

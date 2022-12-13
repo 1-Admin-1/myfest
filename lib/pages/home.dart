@@ -183,55 +183,6 @@ class PageHome extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-// final List<String> titles = [
-//   "HOME",
-//   "LOCATION",
-//   "PARTY",
-//   "USER",
-// ];
-
-// final List<Widget> images = [
-//   Hero(
-//     tag: "HOME",
-//     child: ClipRRect(
-//       borderRadius: BorderRadius.circular(20.0),
-//       child: Image.asset(
-//         "assets/images/home1.png",
-//         fit: BoxFit.contain,
-//       ),
-//     ),
-//   ),
-//   Hero(
-//     tag: "LOCATION",
-//     child: ClipRRect(
-//       borderRadius: BorderRadius.circular(20.0),
-//       child: Image.asset(
-//         "assets/images/location1.png",
-//         fit: BoxFit.contain,
-//       ),
-//     ),
-//   ),
-//   Hero(
-//     tag: "PARTY",
-//     child: ClipRRect(
-//       borderRadius: BorderRadius.circular(20.0),
-//       child: Image.asset(
-//         "assets/images/party1.png",
-//         fit: BoxFit.contain,
-//       ),
-//     ),
-//   ),
-//   Hero(
-//     tag: "USER",
-//     child: ClipRRect(
-//       borderRadius: BorderRadius.circular(20.0),
-//       child: Image.asset(
-//         "assets/images/user1.png",
-//         fit: BoxFit.contain,
-//       ),
-//     ),
-//   ),
-// ];
 
 class _MyHomePageState extends State<PageHome> {
   @override

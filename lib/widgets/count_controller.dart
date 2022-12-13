@@ -17,11 +17,11 @@ class CountController extends StatefulWidget {
     this.contentPadding = const EdgeInsets.symmetric(horizontal: 25.0),
   }) : super(key: key);
 
-  final Widget Function(bool enabled) decrementIconBuilder;
-  final Widget Function(bool enabled) incrementIconBuilder;
+  final Widget Function(bool enabled) decrementIconBuilder;//Variable para decrmentar contador
+  final Widget Function(bool enabled) incrementIconBuilder;//Variable para incrmentar contador
   final Widget Function(int count) countBuilder;
   final int count;
-  final Function(int) updateCount;
+  final Function(int) updateCount;//Varible para actualizar contador
   final int stepSize;
   final int? minimum;
   final int? maximum;
@@ -59,12 +59,12 @@ class _CountControllerState extends State<CountController> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             InkWell(
-              onTap: _decrementCounter,
+              onTap: _decrementCounter,//Al toque llama la funcion
               child: widget.decrementIconBuilder(canDecrement),
             ),
             widget.countBuilder(count),
             InkWell(
-              onTap: _incrementCounter,
+              onTap: _incrementCounter,//Al toque llama la funcion
               child: widget.incrementIconBuilder(canIncrement),
             ),
           ],
