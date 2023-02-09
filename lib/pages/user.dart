@@ -26,7 +26,33 @@ class PageUser extends StatefulWidget {
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<PageUser> {
+class _ProfilePageState extends State<PageUser>
+    with SingleTickerProviderStateMixin {
+  static const List<Tab> myTabs = <Tab>[
+    Tab( child: Text('Creadas', 
+      style: TextStyle(
+        color: Colors.black,
+        fontSize: 16),),
+      ),
+    Tab( child: Text('Asistencia', 
+      style: TextStyle(
+        color: Colors.black,
+        fontSize: 16),),
+      ),
+  ];
+
+  late TabController _tabController;
+
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: myTabs.length, vsync: this);
+  }
+
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
   //Variable para obtener el usuario logeado y mostrar sus datos
   final user = FirebaseAuth.instance.currentUser!;
   //Funcion para leer los datos del usuario
@@ -45,8 +71,6 @@ class _ProfilePageState extends State<PageUser> {
       .snapshots()
       .map((snapshot) =>
           snapshot.docs.map((doc) => Events.fromJson(doc.data())).toList());
-  
-      
 
   @override
   Widget build(BuildContext context) {
@@ -58,35 +82,72 @@ class _ProfilePageState extends State<PageUser> {
         } else if (snapshot.hasData) {
           final users = snapshot.data!;
           return Scaffold(
-            appBar: buildAppBar(context),
-            body: ListView(
-              physics: BouncingScrollPhysics(),
+            
+            //buildAppBar(context),
+            body: Column(
               children: [
-                //Clase que da el diseno de la imagen(Aun no esta implementado)
-                // ProfileWidget(
-                //   imagePath: 'userProfile.imagePath',
-                //   onClicked: () {},
-                // ),
-                const SizedBox(height: 80),
-                //funcion para mostrar los datos del usuario
-                buildName(users.nombre, users.edad, users.email,
-                    users.numeroTelefono),
-                const SizedBox(height: 24),
-                //Boton de editar que manda el Modelo Users y asi pueda editarlos
-                Center(child: buildEditButton(users)),
-                const SizedBox(height: 24),
-                //Clase que mostrara estadisticas(Aun no implementado)
-                NumbersWidget(),
-                const SizedBox(height: 48),
-                //Funcion para mostrar titulo de las listas
-                buildList(),
-                const SizedBox(
-                  height: 8.0,
+                Expanded(
+                  child: ListView(
+                      physics: BouncingScrollPhysics(),
+                      children: [
+                        buildAppBar(context),
+                        //Clase que da el diseno de la imagen(Aun no esta implementado)
+                        // ProfileWidget(
+                        //   imagePath: 'userProfile.imagePath',
+                        //   onClicked: () {},
+                        // ),
+                        const SizedBox(height: 30),
+                        //funcion para mostrar los datos del usuario
+                        buildName(users.nombre, users.edad, users.email,
+                            users.numeroTelefono),
+                        const SizedBox(height: 24),
+                        //Boton de editar que manda el Modelo Users y asi pueda editarlos
+                        Center(child: buildEditButton(users)),
+                        const SizedBox(height: 24),
+                        //Clase que mostrara estadisticas(Aun no implementado)
+                        NumbersWidget(),
+                        const SizedBox(height: 48),
+                        //Funcion para mostrar titulo de las listas
+                        //buildList(),
+                        const SizedBox(
+                          height: 15.0,
+                        ),
+                        //Clase que muestra todas las listas creadas por el usuario
+
+                      ],
+                    ), 
+                  ),
+                
+                TabBar(
+                  indicatorColor: Colors.black,
+                  controller: _tabController,
+                  tabs: myTabs,
+                  
                 ),
-                //Clase que muestra todas las listas creadas por el usuario
-                const PagePartyProfile(),
+                Expanded(
+                  child: TabBarView(
+                          controller: _tabController,
+                          children: [
+                            // Pages for each tab
+                            Container(
+                              child: PagePartyProfile(),
+                            ),
+                            Container(
+                              color: Colors.red,
+                              child: Center(
+                                child: Text('Page 2'),
+                              ),
+                            ),
+                        
+                            ],
+                          ),
+                  ),
               ],
-            ),
+            )
+            
+            
+            
+            
           );
         } else {
           //Circulo de carga
@@ -124,17 +185,32 @@ class _ProfilePageState extends State<PageUser> {
         )),
       );
   //Funcion que disena titulo de las listas
-  Widget buildList() => Container(
-        padding: EdgeInsets.symmetric(horizontal: 48),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text(
-              'Fiestas Actuales',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 16),
-          ],
-        ),
+  TabBarView buildList() => TabBarView(
+                  controller: _tabController,
+                  children: myTabs.map((Tab tab) {
+                    final String label = tab.text!.toLowerCase();
+                    return Center(
+                      child: Text(
+                        'This is the $label tab',
+                        style: const TextStyle(fontSize: 36),
+                      ),
+                    );
+                  }).toList(),
+
+        // child: Scaffold(
+        //   appBar: TabBar(
+        //   labelColor: Colors.black,
+        //   tabs: [
+        //     Tab(
+        //       text: 'Fiestas Creadas',
+        //     ),
+        //     Tab(
+        //       text: 'Asistencia',
+        //     ),
+        //   ],
+        // ),
+        // body:
+        // ,
+        // )
       );
 }

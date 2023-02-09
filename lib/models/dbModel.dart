@@ -37,6 +37,7 @@ class Events {
       required this.direccion,
       required this.numeroDireccion,
       required this.userEmail});
+      
   Map<String, dynamic> toJson() => {
         'id': id,
         'title': title,
