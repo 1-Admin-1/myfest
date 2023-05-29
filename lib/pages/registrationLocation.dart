@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:MyFest/Utils.dart';
 import 'package:MyFest/Main.dart';
+import 'package:MyFest/pages/login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -11,15 +12,13 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:email_validator/email_validator.dart';
 import 'package:MyFest/models/dbModel.dart';
-import 'registrationLocation.dart';
-
 //Clase PageRegistration
 //Registra a usuarios
 // Create a Form widget.
-class PageRegistration extends StatefulWidget {
-  final Function() onClickedSignIn;
+class PageRegistrationLocation extends StatefulWidget {
+   final Function() onClickedSignIn;
 
-  const PageRegistration({
+  const PageRegistrationLocation({
     Key? key,
     required this.onClickedSignIn,
   }) : super(key: key);
@@ -28,7 +27,7 @@ class PageRegistration extends StatefulWidget {
 }
 
 // Holds data related to the form.
-class MainFormState extends State<PageRegistration> {
+class MainFormState extends State<PageRegistrationLocation> {
   //Variables de controladores de textfield y llave de estado para el debugging
   final keyForm = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
@@ -52,31 +51,12 @@ class MainFormState extends State<PageRegistration> {
       child: SingleChildScrollView(
         child: Card(
           elevation: 16.0,
-          margin:
-              const EdgeInsets.only(top: 100, bottom: 16, left: 16, right: 16),
+          margin: const EdgeInsets.only(top: 100, bottom: 16, left: 16, right: 16),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                // CircleAvatar(
-                //   radius: 30,
-                //   backgroundImage:
-                //       _pickedImage != null ? FileImage(_pickedImage!) : null,
-                // ),
-                // TextButton.icon(
-                //     onPressed: () async {
-                //       final img = await _imagePicker.pickImage(
-                //           source: ImageSource.camera);
-                //       setState(() {
-                //         _pickedImage = File(img!.path);
-                //       });
-                //     },
-                //     style: TextButton.styleFrom(
-                //       foregroundColor: Theme.of(context).primaryColor,
-                //     ),
-                //     icon: const Icon(Icons.image),
-                //     label: const Text('Añadir foto')),
                 TextFormField(
                   controller: nameCtrl,
                   decoration: const InputDecoration(
@@ -121,6 +101,15 @@ class MainFormState extends State<PageRegistration> {
                           : null,
                 ),
                 TextFormField(
+                  controller: emailCtrl,
+                  decoration: const InputDecoration(labelText: "RFC"),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  // validator: (email) =>
+                  //     email != null && !EmailValidator.validate(email)
+                  //         ? 'Ingresa un correo valido'
+                  //         : null,
+                ),
+                TextFormField(
                   controller: passwordCtrl,
                   obscureText: true,
                   decoration: const InputDecoration(
@@ -143,7 +132,8 @@ class MainFormState extends State<PageRegistration> {
                 Container(
                   height: 50,
                   width: 250,
-                  child: ElevatedButton.icon(
+                  child: 
+                  ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xfff70506),
                       minimumSize: const Size.fromHeight(50),
@@ -162,6 +152,7 @@ class MainFormState extends State<PageRegistration> {
                     //         context, MaterialPageRoute(builder: (_) => HomePage()));
                     // },
                   ),
+                  
                 ),
                 const SizedBox(
                   height: 20,
@@ -173,7 +164,7 @@ class MainFormState extends State<PageRegistration> {
                       text: '¿Ya tienes cuenta?',
                       children: [
                         TextSpan(
-                          recognizer: TapGestureRecognizer()
+                        recognizer: TapGestureRecognizer()
                             ..onTap = widget.onClickedSignIn,
                           text: 'Iniciar sesión',
                           style: const TextStyle(
@@ -186,27 +177,7 @@ class MainFormState extends State<PageRegistration> {
                 const SizedBox(
                   height: 90,
                 ),
-                RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      style: const TextStyle(color: Colors.black, fontSize: 15),
-                      text: '¿Registrar Ubicación?',
-                      children: [
-                        TextSpan(
-                          recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Navigator.push(
-                              context, MaterialPageRoute(builder: (_) => PageRegistrationLocation(onClickedSignIn: () {  },))
-                            );
-                          },
-                          text: 'Ingresar',
-                          style: const TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: Color.fromARGB(255, 131, 43, 43),
-                          ),
-                        ),
-                      ],
-                    )),
+                
               ],
             ),
           ),
@@ -225,7 +196,6 @@ class MainFormState extends State<PageRegistration> {
     }
     return null;
   }
-
 //Funcion de validaciones Nombre
   String? validateName(String? value) {
     String pattern = r'(^[a-zA-Z ]*$)';
@@ -237,7 +207,6 @@ class MainFormState extends State<PageRegistration> {
     }
     return null;
   }
-
 //Funcion de validaciones Numero Telefono
   String? validateMobile(String? value) {
     String patttern = r'(^[0-9]*$)';
@@ -249,7 +218,6 @@ class MainFormState extends State<PageRegistration> {
     }
     return null;
   }
-
 //Funcion de validaciones Correo
   String? validateEmail(String? value) {
     String pattern =
@@ -263,7 +231,6 @@ class MainFormState extends State<PageRegistration> {
       return null;
     }
   }
-
 //Funcion de validaciones Edad
   String? validateAge(String? value) {
     int age = int.parse(value!);
@@ -275,8 +242,10 @@ class MainFormState extends State<PageRegistration> {
     return null;
   }
 
+
 //Funcion asincrona que espera a que los campos sean correctos para mandar
   FutureOr signUp() async {
+
     final isValid = formKey.currentState!.validate();
     if (!isValid) return;
 
@@ -287,40 +256,45 @@ class MainFormState extends State<PageRegistration> {
               child: CircularProgressIndicator(),
             ));
     try {
-      //En espera para mandar el registron en donde hace una autenticacion con
-      //Correo y contrasena
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+         //En espera para mandar el registron en donde hace una autenticacion con 
+         //Correo y contrasena
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailCtrl.text.trim(), password: passwordCtrl.text.trim());
-      if (formKey.currentState!.validate()) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Procesando datos...')),
-        );
-      }
-      //Manda el modelo de datos
-      final users = Users(
-        numeroTelefono: mobileCtrl.text,
-        direccionResidencia: directionCtrl.text,
-        edad: int.parse(ageCtrl.text),
-        email: emailCtrl.text,
-        nombre: nameCtrl.text,
-      );
-      //Manda a llamar funcionpara crear usuario con sus registros personales
-      createUser(users: users);
-      Navigator.pop(context);
+          if (formKey.currentState!.validate()) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Procesando datos...')),
+                    );
+                  }
+                  //Manda el modelo de datos 
+                  final users = Users(
+                    numeroTelefono: mobileCtrl.text, 
+                    direccionResidencia: directionCtrl.text, 
+                    edad: int.parse(ageCtrl.text), 
+                    email: emailCtrl.text, 
+                    nombre: nameCtrl.text,
+                      );
+                      //Manda a llamar funcionpara crear usuario con sus registros personales
+                  createUser(users: users);
+                  Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
-      print(e); //Imprime en consola el error
-      Utils.showSnackBar(e.message); //Manda mensaje de error en pantalla
+      
+        print(e);//Imprime en consola el error
+        Utils.showSnackBar(e.message);//Manda mensaje de error en pantalla
     }
     // Navigator.of(context) not working!
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
 
   //Crea un doc por usuario en la colleccion de usuarios
-  FutureOr createUser({required Users users}) async {
-    final docUser =
-        FirebaseFirestore.instance.collection('users').doc(users.email);
+   FutureOr createUser({required Users users}) async {
+    final docUser = FirebaseFirestore.instance.collection('users').doc(users.email);
     users.id = docUser.id;
     final json = users.toJson();
     await docUser.set(json);
   }
+
 }
+
+
+        
+ 

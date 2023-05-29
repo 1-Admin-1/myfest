@@ -1,5 +1,7 @@
 //Librerias
+import 'dart:async';
 import 'dart:developer';
+import 'package:MyFest/pages/attendence_list_profile.dart';
 import 'package:MyFest/pages/party_list_profile.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -127,18 +129,10 @@ class _ProfilePageState extends State<PageUser>
                 Expanded(
                   child: TabBarView(
                           controller: _tabController,
-                          children: [
+                          children: const [
                             // Pages for each tab
-                            Container(
-                              child: PagePartyProfile(),
-                            ),
-                            Container(
-                              color: Colors.red,
-                              child: Center(
-                                child: Text('Page 2'),
-                              ),
-                            ),
-                        
+                            PagePartyProfile(),
+                            PageAttendanceProfile(),
                             ],
                           ),
                   ),

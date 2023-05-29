@@ -28,7 +28,7 @@ class _RegisterPageState extends State<PageCreate> {
   TextEditingController descriptionCtrl = TextEditingController();
 
 //Funcion para crea evento en base a un modelo de objetos
-  Future createEvent({required Events events}) async {
+  FutureOr createEvent({required Events events}) async {
     final docUser = FirebaseFirestore.instance.collection('events').doc();
     events.id = docUser.id;
     final json = events.toJson();

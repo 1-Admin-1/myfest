@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 //Modelo de la base de datos que se manda a Firebase Store
 
 class Product {
@@ -17,9 +16,8 @@ class Product {
       this.quantity = 0});
 }
 
-
 //Clase que da modelo a la base de datos y con lo que mandamos los datos
-//Esta clase es para datos principales de cada evento 
+//Esta clase es para datos principales de cada evento
 class Events {
   late String id;
   String title;
@@ -37,7 +35,7 @@ class Events {
       required this.direccion,
       required this.numeroDireccion,
       required this.userEmail});
-      
+
   Map<String, dynamic> toJson() => {
         'id': id,
         'title': title,
@@ -66,7 +64,10 @@ class Attendance {
   String nombre;
 
   Attendance(
-      {this.id = '', required this.cantidadPersonas, required this.userEmail, required this.nombre});
+      {this.id = '',
+      required this.cantidadPersonas,
+      required this.userEmail,
+      required this.nombre});
   Map<String, dynamic> toJson() => {
         'id': id,
         'countPersons': cantidadPersonas,
@@ -75,6 +76,40 @@ class Attendance {
       };
   static Attendance fromJson(Map<String, dynamic> json) => Attendance(
         id: json['id'],
+        cantidadPersonas: json['countPersons'],
+        userEmail: json['user_email'],
+        nombre: json['name'],
+      );
+}
+
+class AttendanceUserProfile {
+  late String id;
+  String idEvent;
+  String userEmail;
+  int cantidadPersonas;
+  String nombre;
+  String title;
+
+  AttendanceUserProfile(
+      {this.id = '',
+      required this.idEvent,
+      required this.title,
+      required this.cantidadPersonas,
+      required this.userEmail,
+      required this.nombre});
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'idEvent': idEvent,
+        'title': title,
+        'countPersons': cantidadPersonas,
+        'user_email': userEmail,
+        'name': nombre
+      };
+  static AttendanceUserProfile fromJson(Map<String, dynamic> json) =>
+      AttendanceUserProfile(
+        id: json['id'],
+        idEvent: json['idEvent'],
+        title: json['title'],
         cantidadPersonas: json['countPersons'],
         userEmail: json['user_email'],
         nombre: json['name'],
@@ -115,5 +150,45 @@ class Users {
       email: json['email'],
       edad: json['edad'],
       numeroTelefono: json['numeroTelefono'],
+      ubicacionImg: json['ubicacionImg']);
+}
+
+class UsersProviders {
+  late String id;
+  String nombre;
+  String direccionResidencia;
+  String email;
+  String numeroTelefono;
+  String rfc;
+  int edad;
+  String ubicacionImg;
+
+  UsersProviders(
+      {this.id = '',
+      this.ubicacionImg = '',
+      required this.rfc,
+      required this.nombre,
+      required this.direccionResidencia,
+      required this.email,
+      required this.numeroTelefono,
+      required this.edad});
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'nombre': nombre,
+        'ubicacionImg': ubicacionImg,
+        'direccionResidencia': direccionResidencia,
+        'email': email,
+        'numeroTelefono': numeroTelefono,
+        'edad': edad,
+        'rfc': rfc,
+      };
+  static UsersProviders fromJson(Map<String, dynamic> json) => UsersProviders(
+      id: json['id'],
+      nombre: json['nombre'],
+      direccionResidencia: json['direccionResidencia'],
+      email: json['email'],
+      edad: json['edad'],
+      numeroTelefono: json['numeroTelefono'],
+      rfc: json['rfc'],
       ubicacionImg: json['ubicacionImg']);
 }

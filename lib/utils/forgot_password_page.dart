@@ -1,4 +1,6 @@
 //Librerias
+import 'dart:async';
+
 import 'package:MyFest/Utils.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -103,7 +105,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     );
   }
   //Funcion asincrona que esta  en espera a recibir un valor y verificar que sea valido
-  Future resetPassword() async {
+  FutureOr resetPassword() async {
     final isValid = formKey.currentState!.validate();
     if (!isValid) return;
     showDialog(//Circulo de carga

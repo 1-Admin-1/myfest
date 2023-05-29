@@ -1,4 +1,5 @@
 //Librerías
+import 'package:MyFest/pages/registrationLocation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //Routes
@@ -14,11 +15,15 @@ class AuthPage extends StatefulWidget {
 //Verifica si el usuario se puede loguear
 class _AuthPageState extends State<AuthPage> {
   bool isLogin = true;
+  
+  bool isRegistration = true;
 
   @override
   Widget build(BuildContext context) => isLogin 
     ? Login(onClickedSignUp: toggle) 
-    : PageRegistration(onClickedSignIn: toggle);
+    : isRegistration
+      ? PageRegistration(onClickedSignIn: toggle)
+      : PageRegistrationLocation(onClickedSignIn: toggle);
 
     void toggle()=> setState(() => isLogin =!isLogin);
 }

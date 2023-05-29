@@ -1,4 +1,6 @@
 //Librerias
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -12,7 +14,7 @@ import 'utils/auth_page.dart';
 
 // Main 
 //Declarada en futuro por espera que inicie firabase en la app
-Future<void> main() async {
+FutureOr<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
  
@@ -29,6 +31,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    
     return MaterialApp(
       scaffoldMessengerKey: Utils.messengerKey,
       navigatorKey: navigatorKey,

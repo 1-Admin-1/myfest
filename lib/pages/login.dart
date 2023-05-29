@@ -163,7 +163,7 @@ class _LoginDemoState extends State<Login> {
     );
   }
 //Funcion para inicio de sesion
-  Future signIn() async {
+  FutureOr signIn() async {
     
     try {
       await _auth.signInWithEmailAndPassword(//espera a que los datos se manden para verificar si esta en Firebase Autentication
