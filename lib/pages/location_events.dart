@@ -27,7 +27,7 @@ class _MyHomePageState extends State<PageLocationProfile> {
     }
   }
 
-  @override
+ @override
   Widget build(BuildContext context) {
     return FutureBuilder<UsersProviders?>(
       future: readUsersOne(),
@@ -49,14 +49,29 @@ class _MyHomePageState extends State<PageLocationProfile> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
+                    'Nombre del Negocio:',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
                     users.nombreNegocio,
                     style: TextStyle(
                       fontSize: 30,
-                      fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 20),
+                  Text(
+                    'Número de Teléfono:',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 8),
                   Text(
                     users.numeroTelefono,
                     style: TextStyle(
@@ -66,6 +81,14 @@ class _MyHomePageState extends State<PageLocationProfile> {
                   ),
                   SizedBox(height: 20),
                   Text(
+                    'Dirección de Residencia:',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
                     users.direccionResidencia,
                     style: TextStyle(
                       fontSize: 30,
@@ -73,6 +96,14 @@ class _MyHomePageState extends State<PageLocationProfile> {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 20),
+                  Text(
+                    'RFC:',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 8),
                   Text(
                     users.rfc,
                     style: TextStyle(
@@ -90,5 +121,6 @@ class _MyHomePageState extends State<PageLocationProfile> {
       },
     );
   }
+
 
 }
