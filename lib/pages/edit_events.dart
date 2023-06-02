@@ -38,8 +38,6 @@ class _EditPageState extends State<PageEdit> {
     controllerDescripcion =
         TextEditingController(text: widget.events.descripcion);
     controllerDireccion = TextEditingController(text: widget.events.direccion);
-    controllerDireccionNumero =
-        TextEditingController(text: widget.events.numeroDireccion.toString());
     controllerFecha =
         TextEditingController(text: widget.events.fecha.toString());
   }

@@ -94,7 +94,7 @@ class _MyPartyList extends State<PartyList> {
                             'assets/images/logoNombre.png', //Mandar a llamar imagen default (siguiente version sera personalizable)
                             width: 100,
                             height: 100,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.fill,
                           ),
                         ),
                       ),
@@ -125,7 +125,8 @@ class _MyPartyList extends State<PartyList> {
                           padding:
                               const EdgeInsetsDirectional.fromSTEB(8, 4, 0, 0),
                           child: Text(
-                            events.fecha.toString().replaceAll("00:00:00.000", ""),
+                            // events.fecha.toString().replaceAll("00:00:00.000", ""),
+                            events.fecha.toString().substring(0, events.fecha.toString().length - 12),
                             style: AppTheme.of(context).bodyText3,
                           ),
                         ),

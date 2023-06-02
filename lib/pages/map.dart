@@ -3,9 +3,7 @@ import 'package:MyFest/widgets/marker_information.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:location/location.dart' as lc;
-
 import 'package:permission_handler/permission_handler.dart';
-
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 //Clase PageMap
 class PageMap extends StatefulWidget {
@@ -20,20 +18,17 @@ const DEFAULT_LOCATION = LatLng(20.80906836751571, -102.77288092317399);
 class _MapScreen extends State<PageMap> {
   final Map<String, Marker> _markers = {};
   MapType mapType = MapType.normal;
-
   late BitmapDescriptor icon;
   bool isShowInfo = false;
   late GoogleMapController controller;
   late LatLng latLngOnLongPress;
   late lc.Location location;
-
   bool myLocationEnabled = false;
   bool myLocationButtonEnabled = false;
   LatLng currentLocation = DEFAULT_LOCATION;
-
   Set<Marker> makers = <Marker>{};
-  
   Set<Circle> circles = <Circle>{};
+
   // Future<void> _onMapCreated(GoogleMapController controller) async {
   //   final googleOffices = await locations.getGoogleOffices();
   //   setState(() {
@@ -101,11 +96,6 @@ class _MapScreen extends State<PageMap> {
 
         isShowInfo = !isShowInfo;
       }),
-      // alpha: 1,
-      // anchor: const Offset(0.2, 0.2),
-      // draggable: true,
-      // onDragEnd: onDragEnd,
-      // zIndex: 1
     ));
   }
   //circulo alrededor de la posicion(Aun no implementado por problemas de optimizacion)

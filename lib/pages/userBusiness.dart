@@ -1,34 +1,33 @@
 //Librerias
 import 'dart:async';
-import 'package:MyFest/pages/attendence_list_profile.dart';
-import 'package:MyFest/pages/party_list_profile.dart';
+import 'package:MyFest/pages/attendence_location_profile.dart';
+import 'package:MyFest/pages/edit_profile_location_page.dart';
+import 'package:MyFest/pages/location_events.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 //Routes
-import 'package:MyFest/pages/edit_profile_page.dart';
 import 'package:MyFest/widgets/appbar_widget.dart';
 import 'package:MyFest/widgets/button_widget.dart';
-import 'package:MyFest/widgets/numbers_widget.dart';
 import 'package:MyFest/models/dbModel.dart';
 
 //Clase User
 //Muestra informacion personal y eventos creados
-class PageUser extends StatefulWidget {
+class PageUserBusiness extends StatefulWidget {
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<PageUser>
+class _ProfilePageState extends State<PageUserBusiness>
     with SingleTickerProviderStateMixin {
   static const List<Tab> myTabs = <Tab>[
-    Tab( child: Text('Creadas', 
+    Tab( child: Text('Información', 
       style: TextStyle(
         color: Colors.black,
         fontSize: 16),),
       ),
-    Tab( child: Text('Asistencia', 
+    Tab( child: Text('Fechas', 
       style: TextStyle(
         color: Colors.black,
         fontSize: 16),),
@@ -50,12 +49,12 @@ class _ProfilePageState extends State<PageUser>
   //Variable para obtener el usuario logeado y mostrar sus datos
   final user = FirebaseAuth.instance.currentUser!;
   //Funcion para leer los datos del usuario
-  Future<Users?> readUsersOne() async {
+  Future<UsersProviders?> readUsersOne() async {
     final docUser =
-        FirebaseFirestore.instance.collection('users').doc(user.email);
+        FirebaseFirestore.instance.collection('usersBusiness').doc(user.email);
     final snapshot = await docUser.get();
     if (snapshot.exists) {
-      return Users.fromJson(snapshot.data()!);
+      return UsersProviders.fromJson(snapshot.data()!);
     }
   }
 
@@ -68,7 +67,7 @@ class _ProfilePageState extends State<PageUser>
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Users?>(
+    return FutureBuilder<UsersProviders?>(
       future: readUsersOne(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
@@ -99,13 +98,11 @@ class _ProfilePageState extends State<PageUser>
                         Center(child: buildEditButton(users)),
                         const SizedBox(height: 24),
                         //Clase que mostrara estadisticas(Aun no implementado)
-                        NumbersWidget(),
-                        const SizedBox(height: 48),
+                        // NumbersWidget(),
+                        
                         //Funcion para mostrar titulo de las listas
                         //buildList(),
-                        const SizedBox(
-                          height: 15.0,
-                        ),
+                       
                         //Clase que muestra todas las listas creadas por el usuario
 
                       ],
@@ -123,16 +120,13 @@ class _ProfilePageState extends State<PageUser>
                           controller: _tabController,
                           children: const [
                             // Pages for each tab
-                            PagePartyProfile(),
-                            PageAttendanceProfile(),
+                            PageLocationProfile(),
+                            PageAttendanceLocationProfile(),
                             ],
                           ),
                   ),
               ],
             )
-            
-            
-            
             
           );
         } else {
@@ -163,10 +157,10 @@ class _ProfilePageState extends State<PageUser>
         ],
       );
   //Funcion para editar informacion y redirigir a otra pagina
-  Widget buildEditButton(Users user) => ButtonWidget(
+  Widget buildEditButton(UsersProviders user) => ButtonWidget(
         text: 'Editar Información',
         onClicked: () => Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => EditProfilePage(
+          builder: (context) => EditProfileLocationPage(
               user: user), //Clase EditProfilePage manda datos para modificar
         )),
       );
@@ -182,6 +176,5 @@ class _ProfilePageState extends State<PageUser>
                       ),
                     );
                   }).toList(),
-
       );
 }

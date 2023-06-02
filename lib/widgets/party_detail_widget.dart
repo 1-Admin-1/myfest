@@ -193,7 +193,7 @@ class _PartyDetailWidgetState extends State<PartyDetailWidget>
                                 'assets/images/logoNombre.png', //imagen de deafult(personalizada en la siguiente version)
                                 width: double.infinity,
                                 height: 300,
-                                fit: BoxFit.cover,
+                                fit: BoxFit.fill,
                               ),
                             ),
                           ),
@@ -213,14 +213,21 @@ class _PartyDetailWidgetState extends State<PartyDetailWidget>
                                   widget.events.direccion, //imprimir direccion
                                   style: AppTheme.of(context).title1,
                                 ),
-                                const Text('  Número: ',
+                              ],
+                            )),
+                        Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+                            child: Row(
+                              children: [
+                                const Text('Terraza: ',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontFamily: 'Poppins',
                                         fontWeight: FontWeight.w600,
                                         fontSize: 14)),
                                 Text(
-                                  widget.events.numeroDireccion.toString(),
+                                  widget.events.location, //imprimir direccion
                                   style: AppTheme.of(context).title1,
                                 ),
                               ],
@@ -358,6 +365,7 @@ class _PartyDetailWidgetState extends State<PartyDetailWidget>
                               final attendance = Attendance(
                                   nombre: users.nombre,
                                   userEmail: user.email!,
+                                  numeroTelefono: users.numeroTelefono,
                                   cantidadPersonas: countControllerValue!,
                                   id: widget.events.id);
                               final attendanceUserProfile =

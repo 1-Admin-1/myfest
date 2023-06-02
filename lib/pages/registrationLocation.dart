@@ -12,11 +12,12 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:email_validator/email_validator.dart';
 import 'package:MyFest/models/dbModel.dart';
+
 //Clase PageRegistration
 //Registra a usuarios
 // Create a Form widget.
 class PageRegistrationLocation extends StatefulWidget {
-   final Function() onClickedSignIn;
+  final Function() onClickedSignIn;
 
   const PageRegistrationLocation({
     Key? key,
@@ -32,7 +33,9 @@ class MainFormState extends State<PageRegistrationLocation> {
   final keyForm = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
   final nameCtrl = TextEditingController();
+  final nameNegocioCtrl = TextEditingController();
   final emailCtrl = TextEditingController();
+  final rfcCtrl = TextEditingController();
   final mobileCtrl = TextEditingController();
   final passwordCtrl = TextEditingController();
   final repeatPassCtrl = TextEditingController();
@@ -51,7 +54,8 @@ class MainFormState extends State<PageRegistrationLocation> {
       child: SingleChildScrollView(
         child: Card(
           elevation: 16.0,
-          margin: const EdgeInsets.only(top: 100, bottom: 16, left: 16, right: 16),
+          margin:
+              const EdgeInsets.only(top: 100, bottom: 16, left: 16, right: 16),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -92,6 +96,13 @@ class MainFormState extends State<PageRegistrationLocation> {
                   },
                 ),
                 TextFormField(
+                  controller: nameNegocioCtrl,
+                  decoration: const InputDecoration(
+                    labelText: 'Nombre. Negocio',
+                  ),
+                  validator: validateName,
+                ),
+                TextFormField(
                   controller: emailCtrl,
                   decoration: const InputDecoration(labelText: "Email"),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -101,13 +112,10 @@ class MainFormState extends State<PageRegistrationLocation> {
                           : null,
                 ),
                 TextFormField(
-                  controller: emailCtrl,
+                  controller: rfcCtrl,
                   decoration: const InputDecoration(labelText: "RFC"),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  // validator: (email) =>
-                  //     email != null && !EmailValidator.validate(email)
-                  //         ? 'Ingresa un correo valido'
-                  //         : null,
+                  validator: validateRFC,
                 ),
                 TextFormField(
                   controller: passwordCtrl,
@@ -132,8 +140,7 @@ class MainFormState extends State<PageRegistrationLocation> {
                 Container(
                   height: 50,
                   width: 250,
-                  child: 
-                  ElevatedButton.icon(
+                  child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xfff70506),
                       minimumSize: const Size.fromHeight(50),
@@ -152,32 +159,13 @@ class MainFormState extends State<PageRegistrationLocation> {
                     //         context, MaterialPageRoute(builder: (_) => HomePage()));
                     // },
                   ),
-                  
                 ),
                 const SizedBox(
                   height: 20,
                 ),
-                RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      style: const TextStyle(color: Colors.black, fontSize: 15),
-                      text: '¿Ya tienes cuenta?',
-                      children: [
-                        TextSpan(
-                        recognizer: TapGestureRecognizer()
-                            ..onTap = widget.onClickedSignIn,
-                          text: 'Iniciar sesión',
-                          style: const TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: Color.fromARGB(255, 131, 43, 43),
-                          ),
-                        ),
-                      ],
-                    )),
                 const SizedBox(
                   height: 90,
                 ),
-                
               ],
             ),
           ),
@@ -196,6 +184,7 @@ class MainFormState extends State<PageRegistrationLocation> {
     }
     return null;
   }
+
 //Funcion de validaciones Nombre
   String? validateName(String? value) {
     String pattern = r'(^[a-zA-Z ]*$)';
@@ -207,6 +196,7 @@ class MainFormState extends State<PageRegistrationLocation> {
     }
     return null;
   }
+
 //Funcion de validaciones Numero Telefono
   String? validateMobile(String? value) {
     String patttern = r'(^[0-9]*$)';
@@ -218,6 +208,7 @@ class MainFormState extends State<PageRegistrationLocation> {
     }
     return null;
   }
+
 //Funcion de validaciones Correo
   String? validateEmail(String? value) {
     String pattern =
@@ -231,6 +222,7 @@ class MainFormState extends State<PageRegistrationLocation> {
       return null;
     }
   }
+
 //Funcion de validaciones Edad
   String? validateAge(String? value) {
     int age = int.parse(value!);
@@ -242,10 +234,19 @@ class MainFormState extends State<PageRegistrationLocation> {
     return null;
   }
 
+//Funcion de validaciones RFC
+  String? validateRFC(String? value) {
+    String rfc = value!;
+    if (rfc.length > 13) {
+      return "RFC Incorrecto";
+    } else if (rfc.length < 12) {
+      return "RFC Incorrecto";
+    }
+    return null;
+  }
 
 //Funcion asincrona que espera a que los campos sean correctos para mandar
   FutureOr signUp() async {
-
     final isValid = formKey.currentState!.validate();
     if (!isValid) return;
 
@@ -256,45 +257,43 @@ class MainFormState extends State<PageRegistrationLocation> {
               child: CircularProgressIndicator(),
             ));
     try {
-         //En espera para mandar el registron en donde hace una autenticacion con 
-         //Correo y contrasena
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      //En espera para mandar el registron en donde hace una autenticacion con
+      //Correo y contrasena
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailCtrl.text.trim(), password: passwordCtrl.text.trim());
-          if (formKey.currentState!.validate()) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Procesando datos...')),
-                    );
-                  }
-                  //Manda el modelo de datos 
-                  final users = Users(
-                    numeroTelefono: mobileCtrl.text, 
-                    direccionResidencia: directionCtrl.text, 
-                    edad: int.parse(ageCtrl.text), 
-                    email: emailCtrl.text, 
-                    nombre: nameCtrl.text,
-                      );
-                      //Manda a llamar funcionpara crear usuario con sus registros personales
-                  createUser(users: users);
-                  Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
+      if (formKey.currentState!.validate()) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Procesando datos...')),
+        );
+      }
+      //Manda el modelo de datos
+      final users = UsersProviders(
+        nombre: nameCtrl.text,
+        nombreNegocio: nameNegocioCtrl.text,
+        direccionResidencia: directionCtrl.text,
+        email: emailCtrl.text,
+        edad: int.parse(ageCtrl.text),
+        numeroTelefono: mobileCtrl.text,
+        rfc: rfcCtrl.text,
+      );
+      //Manda a llamar funcionpara crear usuario con sus registros personales
+      createUser(users: users);
       
-        print(e);//Imprime en consola el error
-        Utils.showSnackBar(e.message);//Manda mensaje de error en pantalla
+      Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      print(e); //Imprime en consola el error
+      Utils.showSnackBar(e.message); //Manda mensaje de error en pantalla
     }
     // Navigator.of(context) not working!
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
 
   //Crea un doc por usuario en la colleccion de usuarios
-   FutureOr createUser({required Users users}) async {
-    final docUser = FirebaseFirestore.instance.collection('users').doc(users.email);
+  FutureOr createUser({required UsersProviders users}) async {
+    final docUser =
+        FirebaseFirestore.instance.collection('usersBusiness').doc(users.email);
     users.id = docUser.id;
     final json = users.toJson();
     await docUser.set(json);
   }
-
 }
-
-
-        
- 

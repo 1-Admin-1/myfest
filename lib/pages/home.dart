@@ -9,6 +9,7 @@ import 'map.dart';
 import 'create_events.dart';
 import '../widgets/home_widget.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 
 //backgroundImage: AssetImage('assets/images/pin1.png'),
 class HomePage extends StatefulWidget {
@@ -51,7 +52,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     
     return Scaffold(
-      
       backgroundColor: const Color(0xff080404),
       body: pages[pageIndex],
       bottomNavigationBar: buildMyNavBar(context),
@@ -182,118 +182,142 @@ class PageHome extends StatefulWidget {
 
 class _MyHomePageState extends State<PageHome> {
   Items item1 = Items(
-        title: "Calendario",
-        subtitle: "Marzo 2022",
-        event: "50 Eventos",
-        img: "assets/images/calendar.png");
+        title: "MyFest",
+        subtitle: "Mi Fiesta, Tu Fiesta",
+        description: "¡No te pierdas el festival del año!",
+        explanation: "Descubre los mejores artistas y eventos.",
+        img: "assets/images/playstore.png",
+      );
 
     Items item2 = Items(
-      title: "Terrazas",
+      title: "¿Quiénes somos?",
       subtitle: "",
-      event: "Lista de Terrazas",
-      img: "assets/images/setting.png",
+      description: "Somos un equipo apasionado dedicado a crear experiencias increíbles.",
+      explanation: "Conoce nuestra historia y nuestro compromiso con la calidad.",
+      img: "assets/images/festival.png",
     );
+
     Items item3 = Items(
-      title: "Puntos de Venta",
-      subtitle: "Tiendas",
-      event: "",
-      img: "assets/images/map.png",
-    );
-    Items item4 = Items(
-      title: "Promociones",
-      subtitle: "Rose favirited your Post",
-      event: "",
-      img: "assets/images/setting.png",
-    );
-    Items item5 = Items(
-      title: "Perfil",
-      subtitle: "Datos de Usuario",
-      event: "",
+      title: "¿Para quiénes?",
+      subtitle: "",
+      description: "Nuestros eventos están diseñados para todos los amantes de la diversión y la música.",
+      explanation: "Descubre cómo creamos momentos memorables para personas de todas las edades.",
       img: "assets/images/usuario.png",
     );
-    Items item6 = Items(
-      title: "Configuración",
+
+    Items item4 = Items(
+      title: "¿Cuándo podemos?",
       subtitle: "",
-      event: "",
-      img: "assets/images/setting.png",
+      description: "Nuestros eventos se llevan a cabo durante todo el año, con opciones para todos los gustos.",
+      explanation: ".",
+      img: "assets/images/calendar.png",
     );
+
+    
     
       
 
-  @override
-  Widget build(BuildContext context) {
-    List<Items> myList = [item1, item2, item3, item4, item5, item6];
-    return Scaffold(
-      appBar: AppBar(
-          backgroundColor: Colors.black,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Image.asset(
-                'assets/images/logoNombre.png',
-                fit: BoxFit.cover,
-                height: 35.0,
-              ),
-            ],
-          )),
-      backgroundColor: Colors.black,
-      
-      body: Stack(
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              Expanded(
+ @override
+Widget build(BuildContext context) {
+  List<Items> myList = [item1, item2, item3, item4];
+  return Scaffold(
     
-              child: Container(
-                padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
-                child: GridView.count(
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  crossAxisCount: 2,
-                  childAspectRatio: .90,
-                  children: myList.map((data){
-                    return Card(
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)
-                      ),
-                      child: Center(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            CupertinoButton(
-                              onPressed: () {data.event;},
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.amber,
-                                  image: DecorationImage(
-                                    image:  AssetImage(data.img),
-                                    fit: BoxFit.fill,)
-                                ), 
-                              ),
-                            ),
-                            Text(data.title),
-                            Text(data.subtitle),
-                            
-                          ],
+    backgroundColor: Colors.black,
+    body: Swiper(
+      itemCount: myList.length,
+      itemBuilder: (BuildContext context, int index) {
+        Items currentItem = myList[index];
+
+        return Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/background.png'),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.all(16),
+                  child: Image.asset(
+                    currentItem.img,
+                    width: 200,
+                    height: 200,
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    children: <Widget>[
+                      Center(
+                        child: Text(
+                          currentItem.title,
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
                       ),
-                    );
-                  }).toList(),
+                      Center(
+                        child: Text(
+                          currentItem.subtitle,
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      Center(
+                        child: Text(
+                          currentItem.description,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Center(
+                        child: Text(
+                          currentItem.explanation,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+              ],
             ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
+          ),
+        );
+      },
+    ),
+  );
+}
+
 }
 class Items {
   String title;
   String subtitle;
-  String event;
+  String description;
+  String explanation;
   String img;
-  Items({required this.title, required this.subtitle, required this.event, required this.img});
+
+  Items({
+    required this.title,
+    required this.subtitle,
+    required this.description,
+    required this.explanation,
+    required this.img,
+  });
 }

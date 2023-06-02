@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'home.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
+
 //Clase para crea fiesta
 class PageCreate extends StatefulWidget {
   @override
@@ -14,25 +15,100 @@ class PageCreate extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<PageCreate> {
+  List<String>? nombresNegocio;
+  List<String>? emailNegocio;
+  List<String>? direccionNegocio;
+  late String numeroUsuario;
+
+  @override
+  void initState() {
+    super.initState();
+    obtenerNombresNegocio().then((map) {
+      setState(() {
+        nombresNegocio = map['nombresNegocio'];
+        emailNegocio = map['emailNegocio'];
+        direccionNegocio = map['direccionResidencia'];
+      });
+    });
+    getDatoCampoEspecifico().then((value) {
+      setState(() {
+        numeroUsuario = value;
+      });
+    });
+  }
+
+  String? selectedNombreNegocio;
+  String? selectedEmailNegocio;
+  String? selectedDireccionNegocio;
   //Variable de controladores
-  final user = FirebaseAuth.instance.currentUser!;//Variable de usuario logueado
+  final user =
+      FirebaseAuth.instance.currentUser!; //Variable de usuario logueado
   final controllerTitle = TextEditingController();
   final controllerDescripcion = TextEditingController();
   final controllerFecha = TextEditingController();
   final controllerDireccion = TextEditingController();
-  final controllerDirecionNumero = TextEditingController();
-  GlobalKey<FormState> keyForm = GlobalKey();
-  TextEditingController namePartyCtrl = TextEditingController();
-  TextEditingController addressCtrl = TextEditingController();
-  TextEditingController addressNumberCtrl = TextEditingController();
-  TextEditingController descriptionCtrl = TextEditingController();
 
-//Funcion para crea evento en base a un modelo de objetos
-  FutureOr createEvent({required Events events}) async {
-    final docUser = FirebaseFirestore.instance.collection('events').doc();
-    events.id = docUser.id;
-    final json = events.toJson();
+  GlobalKey<FormState> keyForm = GlobalKey();
+
+// //Funcion para crea evento en base a un modelo de objetos
+//   FutureOr createEvent({required Events events}) async {
+//     final docUser = FirebaseFirestore.instance.collection('events').doc();
+//     events.id = docUser.id;
+//     final json = events.toJson();
+//     await docUser.set(json);
+//   }
+
+  FutureOr createEventCalendar({required EventDate eventDate, required Events events}) async {
+    final docUser2 = FirebaseFirestore.instance.collection('events').doc();
+    events.id = docUser2.id;
+    final json2 = events.toJson();
+    await docUser2.set(json2);
+    final docUser = FirebaseFirestore.instance
+        .collection('usersBusiness')
+        .doc(selectedEmailNegocio)
+        .collection('agenda')
+        .doc();
+    eventDate.id = docUser.id;
+    eventDate.numeroTelefono = numeroUsuario;
+    eventDate.idEvent =  docUser2.id;
+    final json = eventDate.toJson();
     await docUser.set(json);
+  }
+
+  Future<String> getDatoCampoEspecifico() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    DocumentReference documentReference =
+        firestore.collection('users').doc(user.email);
+    DocumentSnapshot snapshot = await documentReference.get();
+
+    if (snapshot.exists) {
+      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+      String campoDeseado = data!['numeroTelefono'];
+      return campoDeseado;
+    }
+
+    return ''; // En caso de no encontrar el campo o documento
+  }
+
+  Future<Map<String, List<String>>> obtenerNombresNegocio() async {
+    List<String> nombresNegocio = [];
+    List<String> emailNegocio = [];
+    List<String> direccionNegocio = [];
+
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection('usersBusiness').get();
+
+    querySnapshot.docs.forEach((doc) {
+      nombresNegocio.add(doc['nombreNegocio']);
+      emailNegocio.add(doc['email']);
+      direccionNegocio.add(doc['direccionResidencia']);
+    });
+
+    return {
+      'nombresNegocio': nombresNegocio,
+      'emailNegocio': emailNegocio,
+      'direccionResidencia': direccionNegocio,
+    };
   }
 
   @override
@@ -41,15 +117,20 @@ class _RegisterPageState extends State<PageCreate> {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.black,
-          title: const Text('Crear Fiesta'),
+          title: const Text(
+            'Crear Fiesta',
+          ),
         ),
         body: SingleChildScrollView(
           child: Container(
             margin: const EdgeInsets.all(40.0),
             child: Form(
-              key: keyForm,
-              child: formUI(),
-            ),
+                key: keyForm,
+                child: Column(
+                  children: [
+                    formUI(),
+                  ],
+                )),
           ),
         ),
       ),
@@ -76,25 +157,57 @@ class _RegisterPageState extends State<PageCreate> {
               validator: validateNameParty,
             )),
         formItemsDesign(
-            Icons.location_pin,
-            TextFormField(
-              controller: controllerDireccion,
-              decoration: const InputDecoration(
-                labelText: 'Dirección',
-              ),
-              keyboardType: TextInputType.streetAddress,
-              validator: validateAddress,
-            )),
+          Icons.celebration_rounded,
+          FutureBuilder<Map<String, List<String>>>(
+            future: obtenerNombresNegocio(),
+            builder: (BuildContext context,
+                AsyncSnapshot<Map<String, List<String>>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else {
+                List<String>? nombresNegocio = snapshot.data!['nombresNegocio'];
+                List<String>? emailNegocio = snapshot.data!['emailNegocio'];
+                List<String>? direccionNegocio =
+                    snapshot.data!['direccionResidencia'];
+                List<String> dropdownItems = nombresNegocio ?? [];
+                return DropdownButton<String>(
+                  value: selectedNombreNegocio,
+                  hint: const Text('Elige localización'),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedNombreNegocio = newValue;
+                      int selectedIndex = nombresNegocio!.indexOf(newValue!);
+                      selectedEmailNegocio = emailNegocio![selectedIndex];
+                      controllerDireccion.text =
+                          direccionNegocio![selectedIndex];
+                    });
+                  },
+                  items: dropdownItems.map((String nombre) {
+                    int index = nombresNegocio!.indexOf(nombre);
+                    String email = emailNegocio![index];
+                    return DropdownMenuItem<String>(
+                      value: nombre, // Enviar el correo electrónico como valor
+                      child: Text(nombre), // Mostrar solo el nombre del negocio
+                    );
+                  }).toList(),
+                );
+              }
+            },
+          ),
+        ),
         formItemsDesign(
-            Icons.location_pin,
-            TextFormField(
-              controller: controllerDirecionNumero,
-              decoration: const InputDecoration(
-                labelText: 'Numero de Dirección',
-              ),
-              keyboardType: TextInputType.text,
-              validator: validateAddressNumber,
-            )),
+          Icons.location_pin,
+          TextFormField(
+            controller: controllerDireccion,
+            decoration: InputDecoration(
+              labelText: 'Dirección',
+            ),
+            keyboardType: TextInputType.streetAddress,
+            validator: validateAddress,
+          ),
+        ),
         formItemsDesign(
             Icons.mode_comment,
             TextFormField(
@@ -121,6 +234,9 @@ class _RegisterPageState extends State<PageCreate> {
                     lastDate: DateTime.now().add(const Duration(days: 30)));
               },
             )),
+        const SizedBox(
+          height: 20,
+        ),
         GestureDetector(
             onTap: () {
               // save();
@@ -149,9 +265,18 @@ class _RegisterPageState extends State<PageCreate> {
                       descripcion: controllerDescripcion.text,
                       fecha: DateTime.parse(controllerFecha.text),
                       direccion: controllerDireccion.text,
-                      numeroDireccion: int.parse(controllerDirecionNumero.text),
-                      userEmail: user.email!);
-                  createEvent(events: events);//funcion para crear eventos
+                      userEmail: user.email!,
+                      location: selectedNombreNegocio!);
+                  String? direccion = controllerDireccion.text;
+                  final eventDate = EventDate(
+                      title: controllerTitle.text,
+                      descripcion: controllerDescripcion.text,
+                      fecha: DateTime.parse(controllerFecha.text),
+                      direccion: direccion,
+                      userEmail: user.email!,
+                      location: selectedNombreNegocio!);
+                  createEventCalendar(eventDate: eventDate,events: events);
+                  // createEvent(events: events); //funcion para crear eventos
                   Navigator.pop(context);
                 },
                 icon: const Icon(
@@ -182,8 +307,11 @@ class _RegisterPageState extends State<PageCreate> {
                   ),
                   onPressed: () {
                     // If the form is true (valid), or false.
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => const HomePage()));//regresa al home page
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) =>
+                                const HomePage())); //regresa al home page
                   },
                   child: const Text(
                     "Cancelar",
@@ -197,7 +325,7 @@ class _RegisterPageState extends State<PageCreate> {
     );
   }
 
-//Validaciones 
+//Validaciones
 
 //Validacion de nombre
   String? validateNameParty(String? value) {
@@ -210,17 +338,23 @@ class _RegisterPageState extends State<PageCreate> {
     }
     return null;
   }
+
 //Validacion de direccion
   String? validateAddress(String? value) {
-    String patttern = r'^[a-zA-Z]*$';
-    RegExp regExp = RegExp(patttern);
-    if (value?.length == 0) {
-      return "La dirección es necesaria";
-    } else if (!regExp.hasMatch(value!)) {
-      return "Dirección invalida";
+    if (selectedNombreNegocio!.isNotEmpty) {
+      return null;
+    } else {
+      String patttern = r'^[a-zA-Z]*$';
+      RegExp regExp = RegExp(patttern);
+      if (value?.length == 0) {
+        return "La dirección es necesaria";
+      } else if (!regExp.hasMatch(value!)) {
+        return "Dirección invalida";
+      }
+      return null;
     }
-    return null;
   }
+
 //Validacion de numero de direccion
   String? validateAddressNumber(String? value) {
     String patttern = r'^[a-zA-Z0-9]*$';
@@ -232,6 +366,7 @@ class _RegisterPageState extends State<PageCreate> {
     }
     return null;
   }
+
 //Validacion de descripcion
   String? validateDescription(String? value) {
     String pattern = r'^[a-zA-Z0-9]*$';

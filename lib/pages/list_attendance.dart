@@ -37,31 +37,34 @@ class _ListEventPage extends State<ListEventPage> {
             return const CircularProgressIndicator();
           } //circulo de carga
           final list = snapshot.data!;
-              return Column(
-                children: [
-                  SizedBox(height: 40,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                    
-                     Text("Lista de Asistencia",
-                        style: TextStyle(color: Colors.white,fontSize: 25,),)
-                      
-                    ],
-                  ),
-                  makeBody(snapshot.data!.length, list)
-                ],
-              );
-              }
-         
-        );
+          return MaterialApp(
+            home: Scaffold(
+              appBar: AppBar(  
+                title: Text("Lista de Asistencia", 
+                          style: TextStyle(color: Colors.blueAccent,fontSize: 25,height: 50),),  
+              ),  
+              body: Column(
+                  children: [
+                  
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                      Text("Lista de Asistencia", 
+                          style: TextStyle(color: Colors.blueAccent,fontSize: 25,height: 50),)
+                      ],
+                    ),
+                    makeBody(snapshot.data!.length, list)
+                  ],
+                ),
+              ),
+          );
+        });
   }
 }
 
 ListTile makeListTile(Attendance attendance) => ListTile(
       contentPadding:
           const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-      
       title: Text(
         attendance.nombre,
         style:
@@ -72,15 +75,15 @@ ListTile makeListTile(Attendance attendance) => ListTile(
           Expanded(
               flex: 1,
               child: Container(
-                child: Text('Asistentes: ${attendance.cantidadPersonas.toString()}',
-                  
+                child: Text(
+                  'Asistentes: ${attendance.cantidadPersonas.toString()}',
                   style: const TextStyle(color: Colors.black),
                 ),
               )),
         ],
       ),
-      trailing: const Icon(FontAwesomeIcons.instagram, color: Colors.purple ,size: 30.0),
-      
+      // trailing: const Icon(FontAwesomeIcons.instagram,
+      //     color: Colors.purple, size: 30.0),
     );
 //Funcion para crear estructura base de la lista y poder mandar llamar la lista de snapshot
 //en forma de Clase Events(Modelo de base de datos)
@@ -95,11 +98,11 @@ Card makeCard(Attendance attendance) => Card(
 ///Funcion para crear el cuerpo de toda la lista y asi dar formato
 ///incluir cantidad de datos, Lista de events
 
-makeBody(int snapshot, List list ) => ListView.builder(
-  scrollDirection: Axis.vertical,
-  shrinkWrap: true,
-  itemCount: snapshot,
-  itemBuilder: (BuildContext context, int index) {
-    return makeCard(list[index]);
-  },
-);
+makeBody(int snapshot, List list) => ListView.builder(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      itemCount: snapshot,
+      itemBuilder: (BuildContext context, int index) {
+        return makeCard(list[index]);
+      },
+    );
