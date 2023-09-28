@@ -3,6 +3,10 @@
 ESTA APP FUNCIONA SOLO PARA ANDROID 10+
 App para creación de eventos
 
+### Dart
+- Dart SDK version: 2.18.6 (stable)
+### Flutter
+- Flutter 3.3.10 • channel stable
 ### Pagina principal
 lib/pages/main.dart
 
